@@ -1,12 +1,13 @@
 <?php
-require_once 'includes/session.php';
+
+require_once __DIR__ . '/config.php';
+require_once SESSION;
 
 if (isLoggedIn()) {
-    $role = getRole();
-    header('Location: /lms/' . $role . '/controller/dashboard.php');
-    exit;
-} else {
-    header('Location: /lms/accounts/controller/login.php');
+    header('Location: ' . BASE_URL . '/' . getRole() . '/controller/dashboard.php');
     exit;
 }
+
+header('Location: ' . BASE_URL . '/accounts/controller/login.php');
+exit;
 ?>

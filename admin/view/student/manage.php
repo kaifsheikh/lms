@@ -56,6 +56,7 @@
                     </td>
                     <td>
                         <form method="POST" action="" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
                             <input type="hidden" name="action" value="assign_teacher">
                             <input type="hidden" name="student_id" value="<?php echo $row['id']; ?>">
                             <select name="teacher_id">
@@ -74,8 +75,9 @@
                     </td>
                     <td>
                         <form method="POST" action="" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
                             <input type="hidden" name="action" value="update_status">
-                            <input type="hidden" name="student_id" value="<?php echo $row['id']; ?>">
+                            <input type="hidden" name="student_id" value="<?= (int) $row['id'] ?>">
                             <select name="status">
                                 <option value="pending"  <?php echo ($status === 'pending') ? 'selected' : ''; ?>>Pending</option>
                                 <option value="process"  <?php echo ($status === 'process') ? 'selected' : ''; ?>>Process</option>
@@ -87,6 +89,7 @@
                     <td>
                         <a href="<?php echo BASE_URL; ?>/admin/controller/student/edit.php?id=<?php echo $row['id']; ?>">Edit</a>
                         <form method="POST" action="<?php echo BASE_URL; ?>/admin/controller/student/delete.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
                             <input type="hidden" name="student_id" value="<?php echo $row['id']; ?>">
                             <button type="submit" style="color:red;">Delete</button>
                         </form>

@@ -29,7 +29,12 @@ $stmt->close();
 $old = $student;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Update data
+
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+        http_response_code(403);
+        exit('Invalid CSRF token');
+    }
+
     $old = [
         'full_name' => trim($_POST['full_name'] ?? ''),
         'father_name' => trim($_POST['father_name'] ?? ''),
@@ -46,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
     $password = $_POST['password'] ?? '';
     $status = $_POST['status'] ?? $student['status'];
+
+    if (!in_array($status, ['pending', 'process', 'active'], true)) {
+        $error = 'Invalid status selected.';
+    }
 
     // Validation
     if (empty($old['full_name']) || empty($old['father_name']) || empty($old['contact_number']) || empty($old['gender']) || empty($old['dob']) || empty($old['address']) || empty($old['email']) || empty($old['joining_date']) || empty($old['course_name']) || empty($old['class_timing']) || empty($old['course_duration']) || empty($old['highest_education'])) {
@@ -81,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Handle file uploads
             $upload_dir = BASE_PATH . 'assets/uploads/students/';
-            if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+            if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
             $student_pic_name = $student['student_pic'];
             $cnic_pic_name = $student['cnic_pic'];
 

@@ -13,6 +13,8 @@
 <!-- ================= SECTION 1: CREATE NEW BATCH (no student selection) ================= -->
 <h2>Create New Batch</h2>
 <form method="POST" action="">
+     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+
     <input type="hidden" name="action" value="create_batch">
     <label>Batch Name:</label><br>
     <input type="text" name="batch_name" required><br><br>
@@ -34,6 +36,7 @@
     <p style="color: orange;">Either no unassigned students or no batches available.</p>
 <?php else: ?>
 <form method="POST" action="">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
     <input type="hidden" name="action" value="assign_to_batch">
     <label>Student:</label><br>
     <select name="student_id" required>
@@ -67,6 +70,7 @@
     <p style="color: orange;">No assigned students or no batches available for transfer.</p>
 <?php else: ?>
 <form method="POST" action="">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
     <input type="hidden" name="action" value="transfer_student">
     <label>Student (currently in a batch):</label><br>
     <select name="student_id" required>

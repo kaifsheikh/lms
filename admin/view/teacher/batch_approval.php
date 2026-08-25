@@ -47,11 +47,13 @@
                     <td>
                         <?php if ($status === 'pending'): ?>
                             <form method="POST" action="" style="display:inline;">
-                                <input type="hidden" name="batch_id" value="<?php echo $batch['id']; ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                                <input type="hidden" name="batch_id" value="<?= (int)$batch['id'] ?>">
                                 <button type="submit" name="status" value="approved">Approve</button>
                             </form>
                             <form method="POST" action="" style="display:inline;">
-                                <input type="hidden" name="batch_id" value="<?php echo $batch['id']; ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                                <input type="hidden" name="batch_id" value="<?= (int)$batch['id'] ?>">
                                 <button type="submit" name="status" value="rejected" style="color:red;">Reject</button>
                             </form>
                         <?php else: ?>
@@ -60,8 +62,9 @@
 
                         <!-- Delete batch button (always available) -->
                         <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this batch?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
                             <input type="hidden" name="action" value="delete_batch">
-                            <input type="hidden" name="batch_id" value="<?php echo $batch['id']; ?>">
+                            <input type="hidden" name="batch_id" value="<?= (int)$batch['id'] ?>">
                             <button type="submit" style="color:white; background:red; border:none; padding:5px 10px; cursor:pointer;">Delete</button>
                         </form>
                     </td>

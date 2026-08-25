@@ -11,6 +11,7 @@
 <?php endif; ?>
 
 <form method="POST" action="login.php">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
     <label>Email:</label><br>
     <input type="email" name="email" value="<?php echo htmlspecialchars($old['email'] ?? ''); ?>" required><br><br>
 

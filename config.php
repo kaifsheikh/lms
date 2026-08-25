@@ -1,6 +1,6 @@
 <?php
 // Base Path (automatically detect project root)
-define('BASE_PATH', dirname(__FILE__) . '/');
+define('BASE_PATH', __DIR__ . '/');
 
 // URL base (adjust if project is in subfolder, e.g., /lms)
 define('BASE_URL', '/lms');

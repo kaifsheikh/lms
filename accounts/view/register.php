@@ -7,6 +7,7 @@
 <?php endif; ?>
 
 <form method="POST" action="<?php echo BASE_URL; ?>/accounts/controller/register.php">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
     <label>Full Name:</label><br>
     <input type="text" name="full_name" value="<?php echo htmlspecialchars($old['full_name'] ?? ''); ?>" required><br><br>
 

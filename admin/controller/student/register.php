@@ -27,6 +27,12 @@ function generateStudentId($conn) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+        http_response_code(403);
+        exit('Invalid CSRF token');
+    }
+    
     // Form data capture (actual code, not placeholder)
     $old = [
         'full_name' => trim($_POST['full_name'] ?? ''),

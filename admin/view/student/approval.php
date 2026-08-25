@@ -42,7 +42,9 @@
                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                     <td>
                         <form method="POST" action="" style="display:inline;">
-                            <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+
+                            <input type="hidden" name="user_id" value="<?= (int) $row['id'] ?>">
                             <select name="status">
                                 <option value="pending"  <?php echo ($status === 'pending') ? 'selected' : ''; ?>>Pending</option>
                                 <option value="approved" <?php echo ($status === 'approved') ? 'selected' : ''; ?>>Approved</option>

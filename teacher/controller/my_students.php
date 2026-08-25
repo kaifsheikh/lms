@@ -61,11 +61,25 @@ function calculateCourseEndDate($joining_date, $duration_str) {
 
 // Fetch students assigned to this teacher (including joining_date, course_duration)
 $stmt = $conn->prepare("
-    SELECT s.student_id, s.full_name, s.father_name, s.contact_number, s.email, 
-           s.course_name, s.class_timing, s.course_duration, s.joining_date, s.status, s.created_at
+    SELECT 
+        s.student_id,
+        s.full_name,
+        s.father_name,
+        s.contact_number,
+        s.email,
+        s.course_name,
+        s.class_timing,
+        s.course_duration,
+        s.joining_date,
+        s.status,
+        s.created_at
     FROM students s
-    LEFT JOIN batch_students bs ON s.id = bs.student_id
-    WHERE s.teacher_id = ? AND bs.student_id IS NULL
+    WHERE s.teacher_id = ?
+      AND NOT EXISTS (
+          SELECT 1
+          FROM batch_students bs
+          WHERE bs.student_id = s.id
+      )
     ORDER BY s.created_at DESC
 ");
 $stmt->bind_param("i", $teacher_id);
