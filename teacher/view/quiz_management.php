@@ -14,7 +14,6 @@
 <h2>Create / Assign Quiz</h2>
 <form method="POST" action="">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
-    
     <input type="hidden" name="action" value="create_quiz">
     <label>Quiz Title:</label><br>
     <input type="text" name="title" required><br><br>
@@ -60,12 +59,14 @@
             <th>Due Date</th>
             <th>Timer (min)</th>
             <th>Passing Marks</th>
+            <th>Status</th>
             <th>Created At</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($quizzes as $quiz): ?>
+            <?php $status = $quiz['status'] ?? 'draft'; ?>
             <tr>
                 <td><?php echo htmlspecialchars($quiz['title']); ?></td>
                 <td><?php echo htmlspecialchars($quiz['description']); ?></td>
@@ -73,14 +74,63 @@
                 <td><?php echo htmlspecialchars($quiz['due_date']); ?></td>
                 <td><?php echo htmlspecialchars($quiz['timer']); ?></td>
                 <td><?php echo htmlspecialchars($quiz['passing_marks']); ?></td>
+                <td>
+                    <?php
+                    if ($status === 'draft') {
+                        echo '<span style="color:orange;">Draft</span>';
+                    } elseif ($status === 'active') {
+                        echo '<span style="color:green;">Active</span>';
+                    } else {
+                        echo '<span style="color:gray;">Closed</span>';
+                    }
+                    ?>
+                </td>
                 <td><?php echo htmlspecialchars($quiz['created_at']); ?></td>
                 <td>
-                    <a href="#" onclick="alert('Quiz Start feature coming soon'); return false;">Start</a> |
-                    <a href="#" onclick="alert('Questions feature coming soon'); return false;">Questions</a> |
-                     <a href="<?php echo BASE_URL; ?>/teacher/controller/edit_quiz.php?id=<?php echo $quiz['id']; ?>">Edit</a> |
+                    <!-- Status change buttons -->
+                    <?php if ($status === 'draft'): ?>
+                        <!-- Start button -->
+                        <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Start this quiz? Students will be able to see it.');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="action" value="change_status">
+                            <input type="hidden" name="quiz_id" value="<?php echo $quiz['id']; ?>">
+                            <input type="hidden" name="new_status" value="active">
+                            <button type="submit" style="color:blue;">Start</button>
+                        </form>
+                    <?php elseif ($status === 'active'): ?>
+                        <!-- Close button -->
+                        <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Close this quiz? Students will no longer see it.');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="action" value="change_status">
+                            <input type="hidden" name="quiz_id" value="<?php echo $quiz['id']; ?>">
+                            <input type="hidden" name="new_status" value="closed">
+                            <button type="submit" style="color:orange;">Close</button>
+                        </form>
+                    <?php else: ?>
+                        <!-- Reopen button -->
+                        <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Reopen this quiz?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="action" value="change_status">
+                            <input type="hidden" name="quiz_id" value="<?php echo $quiz['id']; ?>">
+                            <input type="hidden" name="new_status" value="active">
+                            <button type="submit" style="color:green;">Reopen</button>
+                        </form>
+                        <!-- Set as draft -->
+                        <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Set as draft? Students will not see this quiz.');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="action" value="change_status">
+                            <input type="hidden" name="quiz_id" value="<?php echo $quiz['id']; ?>">
+                            <input type="hidden" name="new_status" value="draft">
+                            <button type="submit" style="color:gray;">Set Draft</button>
+                        </form>
+                    <?php endif; ?>
+                    |
+                    <a href="<?php echo BASE_URL; ?>/teacher/controller/manage_questions.php?quiz_id=<?php echo $quiz['id']; ?>">Questions</a>
+                    |
+                    <a href="<?php echo BASE_URL; ?>/teacher/controller/edit_quiz.php?id=<?php echo $quiz['id']; ?>">Edit</a>
+                    |
                     <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Delete this quiz?');">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
-
                         <input type="hidden" name="action" value="delete_quiz">
                         <input type="hidden" name="quiz_id" value="<?php echo $quiz['id']; ?>">
                         <button type="submit" style="color:red;">Delete</button>
