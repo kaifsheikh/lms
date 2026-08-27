@@ -1,50 +1,59 @@
 <?php include HEADER; ?>
 
-<h1>All Students</h1>
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">All Students</h1>
 
-<?php if (empty($students)): ?>
-    <p>No students assigned to you yet.</p>
-<?php else: ?>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Student ID</th>
-                <th>Full Name</th>
-                <th>Father Name</th>
-                <th>Course</th>
-                <th>Class Timing</th>
-                <th>Duration</th>
-                <th>Joining Date</th>
-                <th>Course End Date</th>
-                <th>Status</th>
-                <th>Registered At</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($students as $student): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($student['student_id']); ?></td>
-                    <td><?php echo htmlspecialchars($student['full_name']); ?></td>
-                    <td><?php echo htmlspecialchars($student['father_name']); ?></td>
-                    <td><?php echo htmlspecialchars($student['course_name']); ?></td>
-                    <td><?php echo htmlspecialchars($student['class_timing']); ?></td>
-                    <td><?php echo htmlspecialchars($student['course_duration']); ?></td>
-                    <td><?php echo htmlspecialchars($student['joining_date']); ?></td>
-                    <td><?php echo htmlspecialchars($student['course_end_date']); ?></td>
-                    <td>
-                        <?php
-                        $status = $student['status'];
-                        $color = 'orange';
-                        if ($status === 'active') $color = 'green';
-                        if ($status === 'process') $color = 'blue';
-                        ?>
-                        <span style="color: <?php echo $color; ?>;"><?php echo htmlspecialchars($status); ?></span>
-                    </td>
-                    <td><?php echo htmlspecialchars($student['created_at']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+    <?php if (empty($students)): ?>
+        <p class="text-gray-600">No students assigned to you yet.</p>
+    <?php else: ?>
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Father Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class Timing</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joining Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course End Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registered At</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php foreach ($students as $student): ?>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['student_id']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['full_name']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['father_name']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['course_name']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['class_timing']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['course_duration']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['joining_date']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['course_end_date']); ?></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <?php
+                                $status = $student['status'];
+                                $statusClass = 'text-orange-600';
+                                if ($status === 'active') {
+                                    $statusClass = 'text-green-600';
+                                } elseif ($status === 'process') {
+                                    $statusClass = 'text-blue-600';
+                                }
+                                ?>
+                                <span class="font-medium <?php echo $statusClass; ?>">
+                                    <?php echo htmlspecialchars($status); ?>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo htmlspecialchars($student['created_at']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
 
 <?php include FOOTER; ?>

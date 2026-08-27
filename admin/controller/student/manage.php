@@ -368,6 +368,27 @@ while ($teacher = $teachers_result->fetch_assoc()) {
     $teachers[] = $teacher;
 }
 
+// ---------------------------------------------------------
+// Search Student by Student ID (GET request)
+// ---------------------------------------------------------
+$searched_student = null;
+$search_error = '';
+
+if (isset($_GET['student_id']) && trim($_GET['student_id']) !== '') {
+    $search_term = trim($_GET['student_id']);
+
+    $stmt = $conn->prepare("SELECT * FROM students WHERE student_id = ?");
+    $stmt->bind_param("s", $search_term);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $searched_student = $row;
+    } else {
+        $search_error = 'No student found with that Student ID.';
+    }
+    $stmt->close();
+}
 
 // ---------------------------------------------------------
 // Load view
