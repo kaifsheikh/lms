@@ -37,45 +37,178 @@ $page_title = ucfirst($role ?: 'Home');
                 </a>
             </div>
 
-            <!-- Desktop Navigation Links -->
+            <!-- Desktop Navigation -->
             <div class="hidden md:flex md:items-center md:space-x-1">
-                <!-- <a href="<?= BASE_URL ?>/index.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Home</a> -->
-
                 <?php if ($role === 'admin'): ?>
-                    <a href="<?= BASE_URL ?>/admin/controller/dashboard.php" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 transition-colors">Dashboard</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/teacher/approval.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Teacher Approval</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/accountant/approval.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Accountant Approval</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/student/register.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Student Register</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/student/manage.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Manage Students</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/teacher/batch_approval.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Batch Approval</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/attendance_progress.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors"> Attendance Progress</a>
+                    <!-- Admin Dashboard -->
+                    <a href="<?= BASE_URL ?>/admin/controller/dashboard.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 transition-colors">
+                        Dashboard
+                    </a>
+
+                    <!-- Approvals Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Approvals
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Dropdown with pt-2 to bridge gap -->
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/admin/controller/teacher/approval.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Teacher Approval</a>
+                                <a href="<?= BASE_URL ?>/admin/controller/accountant/approval.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Accountant Approval</a>
+                                <a href="<?= BASE_URL ?>/admin/controller/teacher/batch_approval.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Batch Approval</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Students Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Students
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/admin/controller/student/register.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Student Register</a>
+                                <a href="<?= BASE_URL ?>/admin/controller/student/manage.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Students</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Progress -->
+                    <a href="<?= BASE_URL ?>/admin/controller/attendance_progress.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">
+                        Attendance Progress
+                    </a>
 
                 <?php elseif ($role === 'teacher'): ?>
-                    <a href="<?= BASE_URL ?>/teacher/controller/dashboard.php" class="px-3 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 transition-colors">Dashboard</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/my_students.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Unassigned Students</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/all_students.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">All Students</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/create_batch.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Management Batch</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/my_batches.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">My Batches</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/quiz_management.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Quiz Management</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/search_student.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Student Info</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/attendance.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Attendance</a>
-                    <a href="<?= BASE_URL ?>/teacher/controller/attendance_report.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Attendance Report</a>
+                    <!-- Teacher Dashboard -->
+                    <a href="<?= BASE_URL ?>/teacher/controller/dashboard.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 transition-colors">
+                        Dashboard
+                    </a>
+
+                    <!-- Students Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Students
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/teacher/controller/my_students.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Unassigned Students</a>
+                                <a href="<?= BASE_URL ?>/teacher/controller/all_students.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">All Students</a>
+                                <a href="<?= BASE_URL ?>/teacher/controller/search_student.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Student Info</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Batches Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Batches
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/teacher/controller/create_batch.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Management Batch</a>
+                                <a href="<?= BASE_URL ?>/teacher/controller/my_batches.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Batches</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Quiz
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/teacher/controller/quiz_management.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Quiz Management</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Attendance
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/teacher/controller/attendance.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Attendance</a>
+                                <a href="<?= BASE_URL ?>/teacher/controller/attendance_report.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Attendance Report</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Dropdown -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
+                            Students Result
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-md shadow-lg py-1">
+                                <a href="<?= BASE_URL ?>/teacher/controller/quiz_results.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Quiz Result</a>
+                            </div>
+                        </div>
+                    </div>
 
                 <?php elseif ($role === 'accountant'): ?>
-                    <a href="<?= BASE_URL ?>/accountant/controller/dashboard.php" class="px-3 py-2 rounded-md text-sm font-medium bg-purple-600 hover:bg-purple-700 transition-colors">Dashboard</a>
+                    <a href="<?= BASE_URL ?>/accountant/controller/dashboard.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium bg-purple-600 hover:bg-purple-700 transition-colors">
+                        Dashboard
+                    </a>
 
                 <?php elseif ($role === 'student'): ?>
-                    <a href="<?= BASE_URL ?>/student/controller/dashboard.php" class="px-3 py-2 rounded-md text-sm font-medium bg-yellow-600 hover:bg-yellow-700 transition-colors">Dashboard</a>
-
-                     <a href="<?= BASE_URL ?>/student/controller/quizzes.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Upcoming Quizzes</a>
-
-                     <a href="<?= BASE_URL ?>/student/controller/results.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Results</a>
-
-                     <a href="<?= BASE_URL ?>/student/controller/my_attendance.php" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">My Attendance</a>
+                    <a href="<?= BASE_URL ?>/student/controller/dashboard.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium bg-yellow-600 hover:bg-yellow-700 transition-colors">
+                        Dashboard
+                    </a>
+                    <a href="<?= BASE_URL ?>/student/controller/quizzes.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Upcoming Quizzes</a>
+                    <a href="<?= BASE_URL ?>/student/controller/results.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">Results</a>
+                    <a href="<?= BASE_URL ?>/student/controller/my_attendance.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors">My Attendance</a>
 
                 <?php else: ?>
-                    <a href="<?= BASE_URL ?>/accounts/controller/login.php" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 transition-colors">Login</a>
-                    <a href="<?= BASE_URL ?>/accounts/controller/register.php" class="px-3 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 transition-colors">Register</a>
+                    <a href="<?= BASE_URL ?>/accounts/controller/login.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 transition-colors">Login</a>
+                    <a href="<?= BASE_URL ?>/accounts/controller/register.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 transition-colors">Register</a>
 
                 <?php endif; ?>
             </div>
@@ -102,7 +235,7 @@ $page_title = ucfirst($role ?: 'Home');
             </div>
         </div>
 
-        <!-- Mobile Menu (hidden by default) -->
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700">
                 <a href="<?= BASE_URL ?>/index.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Home</a>
@@ -114,20 +247,27 @@ $page_title = ucfirst($role ?: 'Home');
                     <a href="<?= BASE_URL ?>/admin/controller/student/register.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Student Register</a>
                     <a href="<?= BASE_URL ?>/admin/controller/student/manage.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Manage Students</a>
                     <a href="<?= BASE_URL ?>/admin/controller/teacher/batch_approval.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Batch Approval</a>
+                    <a href="<?= BASE_URL ?>/admin/controller/attendance_progress.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Attendance Progress</a>
 
                 <?php elseif ($role === 'teacher'): ?>
                     <a href="<?= BASE_URL ?>/teacher/controller/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 transition-colors">Dashboard</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/my_students.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Unassigned Students</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/all_students.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">All Students</a>
+                    <a href="<?= BASE_URL ?>/teacher/controller/search_student.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Student Info</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/create_batch.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Management Batch</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/my_batches.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">My Batches</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/quiz_management.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Quiz Management</a>
+                    <a href="<?= BASE_URL ?>/teacher/controller/attendance.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Attendance</a>
+                    <a href="<?= BASE_URL ?>/teacher/controller/attendance_report.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Attendance Report</a>
 
                 <?php elseif ($role === 'accountant'): ?>
                     <a href="<?= BASE_URL ?>/accountant/controller/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium bg-purple-600 hover:bg-purple-700 transition-colors">Dashboard</a>
 
                 <?php elseif ($role === 'student'): ?>
                     <a href="<?= BASE_URL ?>/student/controller/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium bg-yellow-600 hover:bg-yellow-700 transition-colors">Dashboard</a>
+                    <a href="<?= BASE_URL ?>/student/controller/quizzes.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Upcoming Quizzes</a>
+                    <a href="<?= BASE_URL ?>/student/controller/results.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">Results</a>
+                    <a href="<?= BASE_URL ?>/student/controller/my_attendance.php" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-white transition-colors">My Attendance</a>
 
                 <?php else: ?>
                     <a href="<?= BASE_URL ?>/accounts/controller/login.php" class="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 hover:bg-blue-700 transition-colors">Login</a>
