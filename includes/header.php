@@ -170,7 +170,7 @@ $page_title = ucfirst($role ?: 'Home');
                         </div>
                     </div>
 
-                    <!-- Attendance Dropdown -->
+                    <!-- Quiz Dropdown -->
                     <div class="relative group">
                         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 hover:text-white transition-colors inline-flex items-center">
                             Students Result
@@ -182,6 +182,8 @@ $page_title = ucfirst($role ?: 'Home');
                             <div class="bg-white rounded-md shadow-lg py-1">
                                 <a href="<?= BASE_URL ?>/teacher/controller/quiz_results.php"
                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Quiz Result</a>
+                                <a href="<?= BASE_URL ?>/teacher/controller/quiz_history.php"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Quiz History</a>
                             </div>
                         </div>
                     </div>

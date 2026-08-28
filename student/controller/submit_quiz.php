@@ -101,7 +101,49 @@ $stmt->bind_param("iiidi", $quiz_id, $student_id, $obtained_marks, $total_marks,
 $stmt->execute();
 $stmt->close();
 
+// ================== INSERT INTO PERMANENT HISTORY ==================
+// 1. Get quiz info (title, teacher_id, passing_marks)
+$stmt = $conn->prepare("SELECT title, teacher_id, passing_marks FROM quizzes WHERE id = ?");
+$stmt->bind_param("i", $quiz_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($row = $result->fetch_assoc()) {
+    $quiz_title = $row['title'];
+    $teacher_id_for_quiz = $row['teacher_id'];
+    $passing_marks = $row['passing_marks'];
+} else {
+    $quiz_title = 'Unknown';
+    $teacher_id_for_quiz = 0;
+    $passing_marks = 0;
+}
+$stmt->close();
+
+// 2. Determine pass/fail status (percentage >= passing_marks)
+$status = ($percentage >= $passing_marks) ? 'pass' : 'fail';
+
+// 3. Get student name
+$stmt = $conn->prepare("SELECT full_name FROM students WHERE id = ?");
+$stmt->bind_param("i", $student_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($row = $result->fetch_assoc()) {
+    $student_name = $row['full_name'];
+} else {
+    $student_name = 'Unknown';
+}
+$stmt->close();
+
+// 4. Insert into quiz_attempt_history (permanent record)
+$stmt = $conn->prepare("
+    INSERT INTO quiz_attempt_history 
+    (teacher_id, student_id, student_name, quiz_title, attempt_date, percentage, status)
+    VALUES (?, ?, ?, ?, NOW(), ?, ?)
+");
+$stmt->bind_param("iissss", $teacher_id_for_quiz, $student_id, $student_name, $quiz_title, $percentage, $status);
+$stmt->execute();
+$stmt->close();
+// ================== END HISTORY INSERT ==================
+
 // Redirect to results page
 header('Location: ' . BASE_URL . '/student/controller/results.php');
 exit;
-?>
