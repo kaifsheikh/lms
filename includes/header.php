@@ -194,6 +194,24 @@ $page_title = ucfirst($role ?: 'Home');
                         </div>
                     </div>
 
+                    <!-- Online Classes -->
+                    <div class="relative group">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors inline-flex items-center">
+                            Online Classes
+                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                            <div class="bg-white rounded-lg shadow-lg ring-1 ring-slate-200 py-1">
+                                <a href="<?= BASE_URL ?>/teacher/controller/manage_classes.php"
+                                   class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">Online Classes</a>
+                                <a href="<?= BASE_URL ?>/teacher/controller/class_report.php"
+                                   class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">Class Report</a>
+                            </div>
+                        </div>
+                    </div>
+
                 <?php elseif ($role === 'accountant'): ?>
                     <a href="<?= BASE_URL ?>/accountant/controller/dashboard.php"
                        class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
@@ -211,6 +229,8 @@ $page_title = ucfirst($role ?: 'Home');
                        class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Results</a>
                     <a href="<?= BASE_URL ?>/student/controller/my_attendance.php"
                        class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">My Attendance</a>
+                    <a href="<?= BASE_URL ?>/student/controller/my_classes.php"
+                       class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">My Classes</a>
 
                 <?php else: ?>
                     <a href="<?= BASE_URL ?>/accounts/controller/login.php"

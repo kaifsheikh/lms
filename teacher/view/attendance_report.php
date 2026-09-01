@@ -40,7 +40,7 @@
         </h2>
 
         <?php if (empty($report_data)): ?>
-            <p class="text-gray-600">Is date ki koi attendance record nahi mili.</p>
+            <p class="text-red-800">Attendance not found</p>
         <?php else: ?>
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
