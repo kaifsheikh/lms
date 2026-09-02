@@ -90,6 +90,31 @@ $page_title = ucfirst($role ?: 'Home');
                         </div>
                     </div>
 
+                    <!-- Course Management -->
+                    <div class="relative group">
+                        <button class="whitespace-nowrap px-2.5 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors inline-flex items-center">
+                            Course Management
+                            <svg class="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Dropdown with pt-2 to bridge gap -->
+                        <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                            <div class="bg-white rounded-lg shadow-lg ring-1 ring-slate-200 py-1.5">
+                                <a href="<?= BASE_URL ?>/admin/controller/course_management.php"
+                                   class="group/item flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover/item:bg-indigo-500 transition-colors"></span>
+                                    Courses
+                                </a>
+                                <a href="<?= BASE_URL ?>/admin/controller/courses_list.php"
+                                   class="group/item flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover/item:bg-indigo-500 transition-colors"></span>
+                                    Course List
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Students Dropdown -->
                     <div class="relative group">
                         <button class="whitespace-nowrap px-2.5 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors inline-flex items-center">

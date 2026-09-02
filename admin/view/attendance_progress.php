@@ -14,9 +14,9 @@
 <form method="GET" action="" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-6">
     <div class="flex flex-col sm:flex-row sm:items-end gap-4">
         <div class="flex-1">
-            <label class="block text-sm font-medium text-slate-700 mb-1.5">Batch Select Karein:</label>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Batch Select:</label>
             <select name="batch_id" required class="border border-slate-300 rounded-lg px-3 py-2 w-full text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                <option value="">-- Batch Chunein --</option>
+                <option value="" disabled selected>-- Select Batch --</option>
                 <?php foreach ($batches as $batch): ?>
                     <option value="<?php echo $batch['id']; ?>" <?php echo ($batch_id == $batch['id']) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($batch['batch_name'] . ' - ' . $batch['starting_date'] . ' (' . $batch['batch_time'] . ') - Teacher: ' . $batch['teacher_name']); ?>
