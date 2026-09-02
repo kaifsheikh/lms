@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (
         !in_array(
             $old['role'],
-            ['admin', 'teacher', 'accountant'],
+            ['admin', 'teacher'],
             true
         )
     ) {

@@ -2,6 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lms/config.php';
 require_once SESSION;
 require_once DB;
+ 
 
 requireRole(['teacher']);
 
@@ -20,49 +21,22 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
     $date = date('Y-m-d');
 }
 
-// Fetch teacher's approved batches for dropdown
-$batches = [];
-$stmt = $conn->prepare("SELECT id, batch_name FROM batches WHERE teacher_id = ? AND status = 'approved' ORDER BY batch_name");
-$stmt->bind_param("i", $teacher_id);
-$stmt->execute();
-$result = $stmt->get_result();
-while ($row = $result->fetch_assoc()) {
-    $batches[] = $row;
-}
-$stmt->close();
+// Model object
+$attendanceModel = new Attendance($conn);
 
-// If batch selected, fetch its attendance for that date
+// Fetch approved batches for dropdown
+$batches = $attendanceModel->getApprovedBatchesForTeacher($teacher_id);
+
+// If batch selected
 if ($batch_id > 0) {
-    // Verify batch belongs to teacher
-    $stmt = $conn->prepare("SELECT id, batch_name FROM batches WHERE id = ? AND teacher_id = ? AND status = 'approved'");
-    $stmt->bind_param("ii", $batch_id, $teacher_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($row = $result->fetch_assoc()) {
-        $selected_batch = $row;
-    } else {
+    // Verify batch ownership and get batch name
+    $selected_batch = $attendanceModel->getBatchByIdAndTeacher($batch_id, $teacher_id);
+    if (!$selected_batch) {
         $error = 'Batch not found or permission denied.';
-        $stmt->close();
         $batch_id = 0;
-    }
-    $stmt->close();
-
-    if ($batch_id > 0) {
-        // Fetch attendance records for that batch and date, joined with student info
-        $stmt = $conn->prepare("
-            SELECT a.id, a.status, s.student_id, s.full_name
-            FROM attendance a
-            INNER JOIN students s ON a.student_id = s.id
-            WHERE a.batch_id = ? AND a.date = ?
-            ORDER BY s.full_name ASC
-        ");
-        $stmt->bind_param("is", $batch_id, $date);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $report_data[] = $row;
-        }
-        $stmt->close();
+    } else {
+        // Fetch attendance report
+        $report_data = $attendanceModel->getAttendanceReportByBatchAndDate($batch_id, $date);
     }
 }
 

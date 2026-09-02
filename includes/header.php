@@ -65,8 +65,6 @@ $page_title = ucfirst($role ?: 'Home');
                             <div class="bg-white rounded-lg shadow-lg ring-1 ring-slate-200 py-1">
                                 <a href="<?= BASE_URL ?>/admin/controller/teacher/approval.php"
                                    class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">Teacher Approval</a>
-                                <a href="<?= BASE_URL ?>/admin/controller/accountant/approval.php"
-                                   class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">Accountant Approval</a>
                                 <a href="<?= BASE_URL ?>/admin/controller/teacher/batch_approval.php"
                                    class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">Batch Approval</a>
                             </div>
@@ -212,12 +210,6 @@ $page_title = ucfirst($role ?: 'Home');
                         </div>
                     </div>
 
-                <?php elseif ($role === 'accountant'): ?>
-                    <a href="<?= BASE_URL ?>/accountant/controller/dashboard.php"
-                       class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                        Dashboard
-                    </a>
-
                 <?php elseif ($role === 'student'): ?>
                     <a href="<?= BASE_URL ?>/student/controller/dashboard.php"
                        class="px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
@@ -274,7 +266,6 @@ $page_title = ucfirst($role ?: 'Home');
                 <?php if ($role === 'admin'): ?>
                     <a href="<?= BASE_URL ?>/admin/controller/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Dashboard</a>
                     <a href="<?= BASE_URL ?>/admin/controller/teacher/approval.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Teacher Approval</a>
-                    <a href="<?= BASE_URL ?>/admin/controller/accountant/approval.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Accountant Approval</a>
                     <a href="<?= BASE_URL ?>/admin/controller/student/register.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Student Register</a>
                     <a href="<?= BASE_URL ?>/admin/controller/student/manage.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Manage Students</a>
                     <a href="<?= BASE_URL ?>/admin/controller/teacher/batch_approval.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Batch Approval</a>
@@ -290,9 +281,6 @@ $page_title = ucfirst($role ?: 'Home');
                     <a href="<?= BASE_URL ?>/teacher/controller/quiz_management.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Quiz Management</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/attendance.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Attendance</a>
                     <a href="<?= BASE_URL ?>/teacher/controller/attendance_report.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Attendance Report</a>
-
-                <?php elseif ($role === 'accountant'): ?>
-                    <a href="<?= BASE_URL ?>/accountant/controller/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Dashboard</a>
 
                 <?php elseif ($role === 'student'): ?>
                     <a href="<?= BASE_URL ?>/student/controller/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">Dashboard</a>

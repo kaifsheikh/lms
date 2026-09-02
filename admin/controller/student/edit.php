@@ -2,6 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lms/config.php';
 require_once SESSION;
 require_once DB;
+
 requireRole(['admin']);
 
 $error = '';
@@ -14,16 +15,14 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $student_db_id = intval($_GET['id']);
 
-// Fetch student data
-$stmt = $conn->prepare("SELECT * FROM students WHERE id = ?");
-$stmt->bind_param("i", $student_db_id);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows === 0) {
+// Model object banao
+$studentModel = new Student($conn);
+
+// Fetch student data via model
+$student = $studentModel->getStudentById($student_db_id);
+if (!$student) {
     die('Student not found.');
 }
-$student = $result->fetch_assoc();
-$stmt->close();
 
 // Pre-fill $old with existing data
 $old = $student;
@@ -52,12 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $status = $_POST['status'] ?? $student['status'];
 
+    // Validation
     if (!in_array($status, ['pending', 'process', 'active'], true)) {
         $error = 'Invalid status selected.';
-    }
-
-    // Validation
-    if (empty($old['full_name']) || empty($old['father_name']) || empty($old['contact_number']) || empty($old['gender']) || empty($old['dob']) || empty($old['address']) || empty($old['email']) || empty($old['joining_date']) || empty($old['course_name']) || empty($old['class_timing']) || empty($old['course_duration']) || empty($old['highest_education'])) {
+    } elseif (
+        empty($old['full_name']) || empty($old['father_name']) || empty($old['contact_number']) ||
+        empty($old['gender']) || empty($old['dob']) || empty($old['address']) ||
+        empty($old['email']) || empty($old['joining_date']) || empty($old['course_name']) ||
+        empty($old['class_timing']) || empty($old['course_duration']) || empty($old['highest_education'])
+    ) {
         $error = 'All fields are required.';
     } elseif (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
         $error = 'Invalid email format.';
@@ -68,24 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!in_array($old['highest_education'], ['intermediate', 'undergraduate', 'postgraduate', 'matric'])) {
         $error = 'Invalid education selected.';
     } else {
-        // Check email uniqueness (exclude current student)
-        $stmt = $conn->prepare("SELECT id FROM students WHERE email = ? AND id != ?");
-        $stmt->bind_param("si", $old['email'], $student_db_id);
-        $stmt->execute();
-        $stmt->store_result();
-        $email_exists = $stmt->num_rows > 0;
-        $stmt->close();
-
-        if (!$email_exists) {
-            $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-            $stmt->bind_param("s", $old['email']);
-            $stmt->execute();
-            $stmt->store_result();
-            if ($stmt->num_rows > 0) $email_exists = true;
-            $stmt->close();
-        }
-
-        if ($email_exists) {
+        // Email uniqueness check via model
+        if ($studentModel->emailExists($old['email'], $student_db_id)) {
             $error = 'Email already exists with another account.';
         } else {
             // Handle file uploads
@@ -105,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!in_array($ext, $allowed_ext)) {
                         $error = 'Invalid image format for student picture.';
                     } else {
-                        // Delete old image
                         if (!empty($student['student_pic']) && file_exists($upload_dir . $student['student_pic'])) {
                             unlink($upload_dir . $student['student_pic']);
                         }
@@ -144,30 +129,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if (empty($error)) {
-                if (!empty($password)) {
-                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                    $sql = "UPDATE students SET full_name=?, father_name=?, contact_number=?, gender=?, dob=?, address=?, email=?, password=?, joining_date=?, course_name=?, class_timing=?, course_duration=?, student_pic=?, cnic_pic=?, highest_education=?, status=? WHERE id=?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("ssssssssssssssssi", $old['full_name'], $old['father_name'], $old['contact_number'], $old['gender'], $old['dob'], $old['address'], $old['email'], $hashed_password, $old['joining_date'], $old['course_name'], $old['class_timing'], $old['course_duration'], $student_pic_name, $cnic_pic_name, $old['highest_education'], $status, $student_db_id);
-                } else {
-                    $sql = "UPDATE students SET full_name=?, father_name=?, contact_number=?, gender=?, dob=?, address=?, email=?, joining_date=?, course_name=?, class_timing=?, course_duration=?, student_pic=?, cnic_pic=?, highest_education=?, status=? WHERE id=?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("sssssssssssssssi", $old['full_name'], $old['father_name'], $old['contact_number'], $old['gender'], $old['dob'], $old['address'], $old['email'], $old['joining_date'], $old['course_name'], $old['class_timing'], $old['course_duration'], $student_pic_name, $cnic_pic_name, $old['highest_education'], $status, $student_db_id);
-                }
-
-                if ($stmt->execute()) {
+                // Model se update karo
+                $data = $old;
+                $data['status'] = $status;
+                if ($studentModel->updateStudent($student_db_id, $data, $student_pic_name, $cnic_pic_name, $password)) {
                     $success = 'Student updated successfully!';
                     // Refresh student data
-                    $stmt = $conn->prepare("SELECT * FROM students WHERE id = ?");
-                    $stmt->bind_param("i", $student_db_id);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    $student = $result->fetch_assoc();
+                    $student = $studentModel->getStudentById($student_db_id);
                     $old = $student;
                 } else {
                     $error = 'Failed to update student.';
                 }
-                $stmt->close();
             }
         }
     }

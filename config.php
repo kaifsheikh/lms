@@ -11,4 +11,5 @@ define('HEADER', INCLUDES_PATH . 'header.php');
 define('FOOTER', INCLUDES_PATH . 'footer.php');
 define('SESSION', INCLUDES_PATH . 'session.php');
 define('DB', INCLUDES_PATH . 'db.php');
+require_once INCLUDES_PATH . 'autoload.php';
 ?>
