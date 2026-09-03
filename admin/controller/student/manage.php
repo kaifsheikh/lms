@@ -30,13 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'assign_teacher') {
-        $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
-        $teacher_id = filter_input(INPUT_POST, 'teacher_id', FILTER_VALIDATE_INT);
+        $student_id = intval($_POST['student_id'] ?? 0);
+        $teacher_id = intval($_POST['teacher_id'] ?? 0);
 
-        if (!$student_id || $student_id <= 0 || !$teacher_id || $teacher_id <= 0) {
-            $error = 'Invalid student or teacher selected.';
+        if ($student_id <= 0 || $teacher_id <= 0) {
+            $error = 'Invalid selection.';
         } else {
-            $result = $studentModel->assignTeacherToStudent($student_id, $teacher_id);
+            // Sirf teacher assign, batch remove
+            $result = $batchModel->assignStudentToTeacherAndBatch($student_id, $teacher_id, null);
             if ($result['success']) {
                 $message = $result['message'];
             } else {

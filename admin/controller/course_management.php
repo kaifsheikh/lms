@@ -34,18 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'total_price' => floatval($_POST['total_price'] ?? 0),
         'skill_level' => trim($_POST['skill_level'] ?? ''),
         'schedule' => trim($_POST['schedule'] ?? ''),
-        'class_hours' => trim($_POST['class_hours'] ?? '')
+        'class_hours' => trim($_POST['class_hours'] ?? ''),
+        'outline' => trim($_POST['outline'] ?? '')
     ];
 
     if (empty($data['course_name']) || $data['duration'] <= 0 || $data['admission_fee'] <= 0 || $data['total_price'] <= 0 || empty($data['skill_level']) || empty($data['schedule']) || empty($data['class_hours'])) {
         $error = 'تمام فیلڈز درکار ہیں اور درست ہونے چاہئیں۔';
     } else {
         if ($courseModel->createCourse($data)) {
-            $_SESSION['course_msg'] = 'کورس کامیابی سے شامل ہو گیا۔';
+            $_SESSION['course_msg'] = 'Course Added Successfully';
             header('Location: ' . BASE_URL . '/admin/controller/course_management.php');
             exit;
         } else {
-            $error = 'کورس شامل کرنے میں ناکامی ہوئی۔';
+            $error = 'Course not Added';
         }
     }
 }

@@ -162,11 +162,6 @@ $page_title = ucfirst($role ?: 'Home');
                         </button>
                         <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
                             <div class="bg-white rounded-lg shadow-lg ring-1 ring-slate-200 py-1.5">
-                                <a href="<?= BASE_URL ?>/teacher/controller/my_students.php"
-                                   class="group/item flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover/item:bg-indigo-500 transition-colors"></span>
-                                    Assigned Students
-                                </a>
                                 <a href="<?= BASE_URL ?>/teacher/controller/all_students.php"
                                    class="group/item flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
                                     <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover/item:bg-indigo-500 transition-colors"></span>
@@ -191,11 +186,6 @@ $page_title = ucfirst($role ?: 'Home');
                         </button>
                         <div class="absolute left-0 pt-2 w-56 z-50 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
                             <div class="bg-white rounded-lg shadow-lg ring-1 ring-slate-200 py-1.5">
-                                <a href="<?= BASE_URL ?>/teacher/controller/create_batch.php"
-                                   class="group/item flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover/item:bg-indigo-500 transition-colors"></span>
-                                    Management Batch
-                                </a>
                                 <a href="<?= BASE_URL ?>/teacher/controller/my_batches.php"
                                    class="group/item flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
                                     <span class="h-1.5 w-1.5 rounded-full bg-slate-300 group-hover/item:bg-indigo-500 transition-colors"></span>

@@ -39,16 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'total_price' => floatval($_POST['total_price'] ?? 0),
             'skill_level' => trim($_POST['skill_level'] ?? ''),
             'schedule' => trim($_POST['schedule'] ?? ''),
-            'class_hours' => trim($_POST['class_hours'] ?? '')
+            'class_hours' => trim($_POST['class_hours'] ?? ''),
+            'outline' => trim($_POST['outline'] ?? '')
         ];
 
         if ($course_id <= 0 || empty($data['course_name']) || $data['duration'] <= 0 || $data['admission_fee'] <= 0 || $data['total_price'] <= 0 || empty($data['skill_level']) || empty($data['schedule']) || empty($data['class_hours'])) {
             $_SESSION['course_error'] = 'تمام فیلڈز درست بھریں۔';
         } else {
             if ($courseModel->updateCourse($course_id, $data)) {
-                $_SESSION['course_msg'] = 'کورس اپ ڈیٹ ہو گیا۔';
+                $_SESSION['course_msg'] = 'Course Updated';
             } else {
-                $_SESSION['course_error'] = 'اپ ڈیٹ میں ناکامی۔';
+                $_SESSION['course_error'] = 'Course not Updated';
             }
         }
         header('Location: ' . BASE_URL . '/admin/controller/courses_list.php');
@@ -60,9 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['course_error'] = 'غلط کورس ID۔';
         } else {
             if ($courseModel->deleteCourse($course_id)) {
-                $_SESSION['course_msg'] = 'کورس ڈیلیٹ ہو گیا۔';
+                $_SESSION['course_msg'] = 'Course Added';
             } else {
-                $_SESSION['course_error'] = 'ڈیلیٹ میں ناکامی۔';
+                $_SESSION['course_error'] = 'Course not Added';
             }
         }
         header('Location: ' . BASE_URL . '/admin/controller/courses_list.php');

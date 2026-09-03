@@ -55,7 +55,6 @@
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
         <h2 class="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
         <div class="flex flex-wrap gap-3">
-            <a href="<?= BASE_URL ?>/teacher/controller/create_batch.php" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg text-sm transition-colors">Create Batch</a>
             <a href="<?= BASE_URL ?>/teacher/controller/quiz_management.php" class="inline-flex items-center px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium rounded-lg text-sm transition-colors">Manage Quizzes</a>
             <a href="<?= BASE_URL ?>/teacher/controller/manage_classes.php" class="inline-flex items-center px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium rounded-lg text-sm transition-colors">Online Classes</a>
             <a href="<?= BASE_URL ?>/teacher/controller/attendance.php" class="inline-flex items-center px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium rounded-lg text-sm transition-colors">Mark Attendance</a>

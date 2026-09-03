@@ -37,56 +37,59 @@ class Course
         return null;
     }
 
-    public function createCourse($data)
-    {
-        $stmt = $this->conn->prepare("
-            INSERT INTO courses 
-            (course_name, duration, admission_fee, total_price, skill_level, schedule, class_hours)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->bind_param(
-            "siddsss",
-            $data['course_name'],
-            $data['duration'],
-            $data['admission_fee'],
-            $data['total_price'],
-            $data['skill_level'],
-            $data['schedule'],
-            $data['class_hours']
-        );
-        $success = $stmt->execute();
-        $stmt->close();
-        return $success;
-    }
+public function createCourse($data)
+{
+    $stmt = $this->conn->prepare("
+        INSERT INTO courses 
+        (course_name, duration, admission_fee, total_price, skill_level, schedule, class_hours, outline)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "siddssss",
+        $data['course_name'],
+        $data['duration'],
+        $data['admission_fee'],
+        $data['total_price'],
+        $data['skill_level'],
+        $data['schedule'],
+        $data['class_hours'],
+        $data['outline']
+    );
+    $success = $stmt->execute();
+    $stmt->close();
+    return $success;
+}
 
-    public function updateCourse($course_id, $data)
-    {
-        $stmt = $this->conn->prepare("
-            UPDATE courses SET 
-                course_name = ?,
-                duration = ?,
-                admission_fee = ?,
-                total_price = ?,
-                skill_level = ?,
-                schedule = ?,
-                class_hours = ?
-            WHERE id = ?
-        ");
-        $stmt->bind_param(
-            "siddsssi",
-            $data['course_name'],
-            $data['duration'],
-            $data['admission_fee'],
-            $data['total_price'],
-            $data['skill_level'],
-            $data['schedule'],
-            $data['class_hours'],
-            $course_id
-        );
-        $success = $stmt->execute();
-        $stmt->close();
-        return $success;
-    }
+public function updateCourse($course_id, $data)
+{
+    $stmt = $this->conn->prepare("
+        UPDATE courses SET 
+            course_name = ?,
+            duration = ?,
+            admission_fee = ?,
+            total_price = ?,
+            skill_level = ?,
+            schedule = ?,
+            class_hours = ?,
+            outline = ?
+        WHERE id = ?
+    ");
+    $stmt->bind_param(
+        "siddssssi",
+        $data['course_name'],
+        $data['duration'],
+        $data['admission_fee'],
+        $data['total_price'],
+        $data['skill_level'],
+        $data['schedule'],
+        $data['class_hours'],
+        $data['outline'],
+        $course_id
+    );
+    $success = $stmt->execute();
+    $stmt->close();
+    return $success;
+}
 
     public function deleteCourse($course_id)
     {

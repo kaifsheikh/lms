@@ -75,31 +75,42 @@
                    class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
         </div>
 
-        <h3 class="text-base font-semibold text-slate-800 border-b border-slate-200 pb-2 pt-2">Course Details</h3>
+<h3 class="text-base font-semibold text-slate-800 border-b border-slate-200 pb-2 pt-2">Course Details</h3>
 
-        <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Joining Date:</label>
-            <input type="date" name="joining_date" value="<?php echo htmlspecialchars($old['joining_date'] ?? ''); ?>" required
-                   class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-        </div>
+<div>
+    <label class="block text-sm font-medium text-slate-700 mb-1">Joining Date:</label>
+    <input type="date" name="joining_date" value="<?php echo htmlspecialchars($old['joining_date'] ?? ''); ?>" required
+           class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+</div>
 
-        <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Course Name:</label>
-            <input type="text" name="course_name" value="<?php echo htmlspecialchars($old['course_name'] ?? ''); ?>" required
-                   class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-        </div>
+<div>
+    <label class="block text-sm font-medium text-slate-700 mb-1">Course:</label>
+    <select name="course_id" required
+            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+        <option value="">-- Select Course --</option>
+        <?php foreach ($courses as $course): 
+            $selected = '';
+            // Agar POST se course_id aya hai to usay prefer karo
+            if (isset($old['course_id']) && $old['course_id'] == $course['id']) {
+                $selected = 'selected';
+            } 
+            // Agar pehli dafa load ho raha hai to student ke current course se match karo
+            elseif (isset($old['course_name']) && isset($old['course_duration']) && $old['course_name'] == $course['course_name'] && $old['course_duration'] == $course['duration']) {
+                $selected = 'selected';
+            }
+        ?>
+        <option value="<?php echo $course['id']; ?>" <?php echo $selected; ?>>
+            <?php echo htmlspecialchars($course['course_name']) . ' - ' . $course['duration'] . ' months'; ?>
+        </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
-        <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Class Timing:</label>
-            <input type="text" name="class_timing" value="<?php echo htmlspecialchars($old['class_timing'] ?? ''); ?>" required
-                   class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-        </div>
-
-        <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Course Duration:</label>
-            <input type="text" name="course_duration" value="<?php echo htmlspecialchars($old['course_duration'] ?? ''); ?>" required
-                   class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-        </div>
+<div>
+    <label class="block text-sm font-medium text-slate-700 mb-1">Class Timing:</label>
+    <input type="text" name="class_timing" value="<?php echo htmlspecialchars($old['class_timing'] ?? ''); ?>" required
+           class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+</div>
 
         <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Highest Education:</label>
@@ -113,15 +124,7 @@
             </select>
         </div>
 
-        <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Status:</label>
-            <select name="status" required
-                    class="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                <option value="pending" <?php echo ($old['status'] === 'pending') ? 'selected' : ''; ?>>Pending</option>
-                <option value="process" <?php echo ($old['status'] === 'process') ? 'selected' : ''; ?>>Process</option>
-                <option value="active"  <?php echo ($old['status'] === 'active') ? 'selected' : ''; ?>>Active</option>
-            </select>
-        </div>
+
 
         <h3 class="text-base font-semibold text-slate-800 border-b border-slate-200 pb-2 pt-2">Documents</h3>
 

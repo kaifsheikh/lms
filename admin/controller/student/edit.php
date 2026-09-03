@@ -15,8 +15,9 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $student_db_id = intval($_GET['id']);
 
-// Model object banao
+// Model objects (autoloader se load honge)
 $studentModel = new Student($conn);
+$courseModel = new Course($conn);
 
 // Fetch student data via model
 $student = $studentModel->getStudentById($student_db_id);
@@ -43,22 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'address' => trim($_POST['address'] ?? ''),
         'email' => trim($_POST['email'] ?? ''),
         'joining_date' => $_POST['joining_date'] ?? '',
-        'course_name' => trim($_POST['course_name'] ?? ''),
         'class_timing' => trim($_POST['class_timing'] ?? ''),
-        'course_duration' => trim($_POST['course_duration'] ?? ''),
         'highest_education' => $_POST['highest_education'] ?? ''
     ];
     $password = $_POST['password'] ?? '';
-    $status = $_POST['status'] ?? $student['status'];
+    $course_id = intval($_POST['course_id'] ?? 0);
+    $old['course_id'] = $course_id;
 
     // Validation
-    if (!in_array($status, ['pending', 'process', 'active'], true)) {
-        $error = 'Invalid status selected.';
-    } elseif (
+    if (
         empty($old['full_name']) || empty($old['father_name']) || empty($old['contact_number']) ||
         empty($old['gender']) || empty($old['dob']) || empty($old['address']) ||
-        empty($old['email']) || empty($old['joining_date']) || empty($old['course_name']) ||
-        empty($old['class_timing']) || empty($old['course_duration']) || empty($old['highest_education'])
+        empty($old['email']) || empty($old['joining_date']) ||
+        empty($old['class_timing']) || empty($old['highest_education']) || $course_id <= 0
     ) {
         $error = 'All fields are required.';
     } elseif (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
@@ -74,76 +72,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($studentModel->emailExists($old['email'], $student_db_id)) {
             $error = 'Email already exists with another account.';
         } else {
-            // Handle file uploads
-            $upload_dir = BASE_PATH . 'assets/uploads/students/';
-            if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
-            $student_pic_name = $student['student_pic'];
-            $cnic_pic_name = $student['cnic_pic'];
+            // Course ki info fetch karo
+            $course = $courseModel->getCourseById($course_id);
+            if (!$course) {
+                $error = 'Selected course not found.';
+            } else {
+                $old['course_name'] = $course['course_name'];
+                $old['course_duration'] = $course['duration'];
 
-            // Student Picture
-            if (isset($_FILES['student_pic']) && $_FILES['student_pic']['error'] === UPLOAD_ERR_OK) {
-                $file = $_FILES['student_pic'];
-                if ($file['size'] > 2 * 1024 * 1024) {
-                    $error = 'Student picture must be less than 2MB.';
-                } else {
-                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                    $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                    if (!in_array($ext, $allowed_ext)) {
-                        $error = 'Invalid image format for student picture.';
+                // File uploads (waisa hi)
+                $upload_dir = BASE_PATH . 'assets/uploads/students/';
+                if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
+                $student_pic_name = $student['student_pic'];
+                $cnic_pic_name = $student['cnic_pic'];
+
+                // Student Picture upload
+                if (isset($_FILES['student_pic']) && $_FILES['student_pic']['error'] === UPLOAD_ERR_OK) {
+                    $file = $_FILES['student_pic'];
+                    if ($file['size'] > 2 * 1024 * 1024) {
+                        $error = 'Student picture must be less than 2MB.';
                     } else {
-                        if (!empty($student['student_pic']) && file_exists($upload_dir . $student['student_pic'])) {
-                            unlink($upload_dir . $student['student_pic']);
-                        }
-                        $new_name = uniqid('stu_', true) . '.' . $ext;
-                        if (move_uploaded_file($file['tmp_name'], $upload_dir . $new_name)) {
-                            $student_pic_name = $new_name;
+                        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                        if (!in_array($ext, $allowed_ext)) {
+                            $error = 'Invalid image format for student picture.';
                         } else {
-                            $error = 'Failed to upload student picture.';
+                            if (!empty($student['student_pic']) && file_exists($upload_dir . $student['student_pic'])) {
+                                unlink($upload_dir . $student['student_pic']);
+                            }
+                            $new_name = uniqid('stu_', true) . '.' . $ext;
+                            if (move_uploaded_file($file['tmp_name'], $upload_dir . $new_name)) {
+                                $student_pic_name = $new_name;
+                            } else {
+                                $error = 'Failed to upload student picture.';
+                            }
                         }
                     }
                 }
-            }
 
-            // CNIC Picture
-            if (empty($error) && isset($_FILES['cnic_pic']) && $_FILES['cnic_pic']['error'] === UPLOAD_ERR_OK) {
-                $file = $_FILES['cnic_pic'];
-                if ($file['size'] > 2 * 1024 * 1024) {
-                    $error = 'CNIC picture must be less than 2MB.';
-                } else {
-                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                    $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                    if (!in_array($ext, $allowed_ext)) {
-                        $error = 'Invalid image format for CNIC picture.';
+                // CNIC Picture upload
+                if (empty($error) && isset($_FILES['cnic_pic']) && $_FILES['cnic_pic']['error'] === UPLOAD_ERR_OK) {
+                    $file = $_FILES['cnic_pic'];
+                    if ($file['size'] > 2 * 1024 * 1024) {
+                        $error = 'CNIC picture must be less than 2MB.';
                     } else {
-                        if (!empty($student['cnic_pic']) && file_exists($upload_dir . $student['cnic_pic'])) {
-                            unlink($upload_dir . $student['cnic_pic']);
-                        }
-                        $new_name = uniqid('cnic_', true) . '.' . $ext;
-                        if (move_uploaded_file($file['tmp_name'], $upload_dir . $new_name)) {
-                            $cnic_pic_name = $new_name;
+                        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                        if (!in_array($ext, $allowed_ext)) {
+                            $error = 'Invalid image format for CNIC picture.';
                         } else {
-                            $error = 'Failed to upload CNIC picture.';
+                            if (!empty($student['cnic_pic']) && file_exists($upload_dir . $student['cnic_pic'])) {
+                                unlink($upload_dir . $student['cnic_pic']);
+                            }
+                            $new_name = uniqid('cnic_', true) . '.' . $ext;
+                            if (move_uploaded_file($file['tmp_name'], $upload_dir . $new_name)) {
+                                $cnic_pic_name = $new_name;
+                            } else {
+                                $error = 'Failed to upload CNIC picture.';
+                            }
                         }
                     }
                 }
-            }
 
-            if (empty($error)) {
-                // Model se update karo
-                $data = $old;
-                $data['status'] = $status;
-                if ($studentModel->updateStudent($student_db_id, $data, $student_pic_name, $cnic_pic_name, $password)) {
-                    $success = 'Student updated successfully!';
-                    // Refresh student data
-                    $student = $studentModel->getStudentById($student_db_id);
-                    $old = $student;
-                } else {
-                    $error = 'Failed to update student.';
+                if (empty($error)) {
+                    // Model se update karo - bina status change kiye
+                    $data = $old;
+                    if ($studentModel->updateStudent($student_db_id, $data, $student_pic_name, $cnic_pic_name, $password)) {
+                        $success = 'Student updated successfully!';
+                        // Refresh student data
+                        $student = $studentModel->getStudentById($student_db_id);
+                        $old = $student;
+                    } else {
+                        $error = 'Failed to update student.';
+                    }
                 }
             }
         }
     }
 }
+
+// View ke liye courses fetch karo
+$courses = $courseModel->getAllCourses();
 
 include BASE_PATH . 'admin/view/student/edit.php';
 ?>
