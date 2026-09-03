@@ -30,7 +30,6 @@
                     <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Course</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Assigned Teacher</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Assign Teacher</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Change Status</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Actions</th>
                 </tr>
@@ -64,25 +63,6 @@
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600">
                                 <?php echo htmlspecialchars($row['teacher_name'] ?? 'Not Assigned'); ?>
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm">
-                                <form method="POST" action="" class="flex items-center gap-1">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
-                                    <input type="hidden" name="action" value="assign_teacher">
-                                    <input type="hidden" name="student_id" value="<?php echo $row['id']; ?>">
-                                    <select name="teacher_id" class="border border-slate-300 rounded-md px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                                        <option value="">-- Select --</option>
-                                        <?php foreach ($teachers as $teacher): ?>
-                                            <?php $selected = ($teacher['id'] == $row['teacher_id']) ? 'selected' : ''; ?>
-                                            <option value="<?php echo $teacher['id']; ?>" <?php echo $selected; ?>>
-                                                <?php echo htmlspecialchars($teacher['full_name']); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1 px-2 rounded-md text-xs transition-colors">
-                                        Assign
-                                    </button>
-                                </form>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap text-sm">
                                 <form method="POST" action="" class="flex items-center gap-1">

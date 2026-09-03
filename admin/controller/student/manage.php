@@ -20,6 +20,7 @@ if (isset($_SESSION['student_error'])) {
 
 // Model object
 $studentModel = new Student($conn);
+$batchModel = new Batch($conn);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
@@ -29,22 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = $_POST['action'] ?? '';
 
-    if ($action === 'assign_teacher') {
-        $student_id = intval($_POST['student_id'] ?? 0);
-        $teacher_id = intval($_POST['teacher_id'] ?? 0);
+if ($action === 'assign_teacher') {
+    $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
+    $teacher_id = filter_input(INPUT_POST, 'teacher_id', FILTER_VALIDATE_INT);
 
-        if ($student_id <= 0 || $teacher_id <= 0) {
-            $error = 'Invalid selection.';
+    if (!$student_id || $student_id <= 0 || !$teacher_id || $teacher_id <= 0) {
+        $error = 'Invalid student or teacher selected.';
+    } else {
+        // Batch model ke central method se assign karo (batch remove ke saath)
+        $result = $batchModel->assignStudentToTeacherAndBatch($student_id, $teacher_id, null);
+        if ($result['success']) {
+            $message = $result['message'];
         } else {
-            // Sirf teacher assign, batch remove
-            $result = $batchModel->assignStudentToTeacherAndBatch($student_id, $teacher_id, null);
-            if ($result['success']) {
-                $message = $result['message'];
-            } else {
-                $error = $result['message'];
-            }
+            $error = $result['message'];
         }
-    } elseif ($action === 'update_status') {
+    }
+}elseif ($action === 'update_status') {
         $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
         $new_status = $_POST['status'] ?? '';
 
