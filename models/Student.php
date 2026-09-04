@@ -416,24 +416,26 @@ class Student
         return $students;
     }
 
-    public function getUnassignedStudents()
-    {
-        $students = [];
-        $stmt = $this->conn->prepare("
-            SELECT s.id, s.student_id, s.full_name, s.email, s.contact_number
-            FROM students s
-            LEFT JOIN batch_students bs ON s.id = bs.student_id
-            WHERE bs.student_id IS NULL
-            ORDER BY s.full_name ASC
-        ");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $students[] = $row;
-        }
-        $stmt->close();
-        return $students;
+public function getUnassignedStudents()
+{
+    $students = [];
+    $stmt = $this->conn->prepare("
+        SELECT s.id, s.student_id, s.full_name, s.email, s.contact_number,
+               COALESCE(u.full_name, 'Not Assigned') AS teacher_name
+        FROM students s
+        LEFT JOIN users u ON s.teacher_id = u.id AND u.role = 'teacher'
+        LEFT JOIN batch_students bs ON s.id = bs.student_id
+        WHERE bs.student_id IS NULL
+        ORDER BY s.full_name ASC
+    ");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $students[] = $row;
     }
+    $stmt->close();
+    return $students;
+}
 
     public function searchStudentWithProgress($student_id_str, $teacher_id)
     {

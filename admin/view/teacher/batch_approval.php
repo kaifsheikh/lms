@@ -146,11 +146,15 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Student</label>
                         <select name="student_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                            <option value="">-- Select Student --</option>
-                            <?php foreach ($unassigned_students as $student): ?>
-                                <option value="<?php echo $student['id']; ?>"><?php echo htmlspecialchars($student['full_name'] . ' (' . $student['student_id'] . ')'); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+    <option value="">-- Select Student --</option>
+    <?php foreach ($unassigned_students as $student): ?>
+        <option value="<?php echo $student['id']; ?>">
+            <?php echo htmlspecialchars(
+                $student['full_name'] . ' (' . $student['student_id'] . ') - Teacher: ' . $student['teacher_name']
+            ); ?>
+        </option>
+    <?php endforeach; ?>
+</select>
                     </div>
 
                     <div class="pt-2 flex justify-end gap-3">
