@@ -247,13 +247,17 @@
 </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Destination Batch</label>
-                        <select name="new_batch_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                            <option value="">-- Select Batch --</option>
-                            <?php foreach ($batches as $batch): ?>
-                                <option value="<?php echo $batch['id']; ?>"><?php echo htmlspecialchars($batch['batch_name']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Destination Batch</label>
+<select id="destination_batch_select" name="new_batch_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+    <option value="">-- Select Batch --</option>
+    <?php foreach ($batches as $batch): ?>
+        <option value="<?php echo $batch['id']; ?>">
+            <?php echo htmlspecialchars(
+                $batch['batch_name'] . ' (' . $batch['batch_time'] . ') - Teacher: ' . $batch['teacher_name']
+            ); ?>
+        </option>
+    <?php endforeach; ?>
+</select>
                     </div>
 
                     <div class="pt-2 flex justify-end gap-3">
@@ -323,7 +327,6 @@
     </div>
 </div>
 
-<!-- JavaScript -->
 <script>
 const allModals = ['createBatchModal', 'addStudentModal', 'removeStudentModal', 'transferStudentModal'];
 const studentBatchMap = <?php echo json_encode($student_batch_map); ?>;
@@ -333,7 +336,7 @@ const batchTeacherMap = <?php echo json_encode(array_column($batches, 'teacher_n
 function openModal(modalId) {
     allModals.forEach(id => document.getElementById(id).classList.add('hidden'));
     document.getElementById(modalId).classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    document.body.style.overflow = 'hidden';
 }
 function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
@@ -351,16 +354,32 @@ function populateStudentSelect(selectElement, studentsArray, batchId) {
     });
 }
 
+// Remove student dropdown
 document.getElementById('remove_batch_select').addEventListener('change', function() {
     const batchId = this.value;
     const filtered = allStudents.filter(student => studentBatchMap[student.id] && studentBatchMap[student.id].batch_id == batchId);
     populateStudentSelect(document.getElementById('remove_student_select'), filtered, batchId);
 });
 
+// Transfer student: current batch change par students aur destination dropdown update
 document.getElementById('transfer_current_batch').addEventListener('change', function() {
-    const batchId = this.value;
-    const filtered = allStudents.filter(student => studentBatchMap[student.id] && studentBatchMap[student.id].batch_id == batchId);
-    populateStudentSelect(document.getElementById('transfer_student_select'), filtered, batchId);
+    const currentBatchId = this.value;
+
+    // Students populate
+    const filtered = allStudents.filter(student => studentBatchMap[student.id] && studentBatchMap[student.id].batch_id == currentBatchId);
+    populateStudentSelect(document.getElementById('transfer_student_select'), filtered, currentBatchId);
+
+    // Destination batch dropdown se current batch hide karo
+    const destinationSelect = document.getElementById('destination_batch_select');
+    if (destinationSelect) {
+        Array.from(destinationSelect.options).forEach(opt => {
+            if (opt.value === currentBatchId && opt.value !== '') {
+                opt.style.display = 'none';
+            } else {
+                opt.style.display = '';
+            }
+        });
+    }
 });
 
 // Live search
