@@ -58,7 +58,8 @@
                             </span>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+                        <!-- Batch info: Starting Date, Time, Students (Created At removed) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
                             <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -86,15 +87,6 @@
                                     <p class="text-sm font-medium text-gray-800"><?php echo count($batch['students']); ?></p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <div>
-                                    <p class="text-xs text-gray-500 uppercase tracking-wide">Created At</p>
-                                    <p class="text-sm font-medium text-gray-800"><?php echo htmlspecialchars($batch['created_at']); ?></p>
-                                </div>
-                            </div>
                         </div>
 
                         <h3 class="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-3">Students in this Batch</h3>
@@ -107,7 +99,6 @@
                                         <tr>
                                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Student ID</th>
                                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Full Name</th>
-                                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Email</th>
                                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Course</th>
                                         </tr>
                                     </thead>
@@ -116,7 +107,6 @@
                                             <tr class="hover:bg-gray-50 transition-colors">
                                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['student_id']); ?></td>
                                                 <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-800"><?php echo htmlspecialchars($student['full_name']); ?></td>
-                                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['email']); ?></td>
                                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['course_name']); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
