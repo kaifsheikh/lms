@@ -3,7 +3,7 @@
 <!-- Detail Modal (improved) -->
 <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 transform transition-all">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 transform transition-all">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
                 <h3 class="text-xl font-bold text-gray-900" id="detailModalTitle">Course Details</h3>
                 <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
@@ -47,7 +47,7 @@
 <!-- Edit Modal (improved) -->
 <div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6 transform transition-all">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 transform transition-all">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
                 <h3 class="text-xl font-bold text-gray-900">Edit Course</h3>
                 <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
@@ -59,27 +59,27 @@
                 <input type="hidden" name="course_id" id="editCourseId">
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Course Name</label>
                         <input type="text" name="course_name" id="editCourseName" required
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Duration (months)</label>
                         <input type="number" name="duration" id="editDuration" min="1" required
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Admission Fee</label>
                         <input type="number" step="0.01" name="admission_fee" id="editAdmission" min="0" required
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Total Price</label>
                         <input type="number" step="0.01" name="total_price" id="editTotal" min="0" required
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Skill Level</label>
                         <select name="skill_level" id="editSkill" required
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
@@ -88,19 +88,19 @@
                             <option value="Advanced">Advanced</option>
                         </select>
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Schedule</label>
                         <input type="text" name="schedule" id="editSchedule" required
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Class Hours</label>
                         <input type="text" name="class_hours" id="editClassHours" required
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                 </div>
                 
-                <div class="mt-4">
+                <div class="mt-4 form-group">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Course Outline</label>
                     <textarea name="outline" id="editOutline" rows="6" 
                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-y"
@@ -123,7 +123,7 @@
 </div>
 
 <script>
-// Modal functions (kept as is, with minor additions)
+// Modal functions
 function showDetail(data) {
     document.getElementById('detailModalTitle').textContent = data.course_name;
     document.getElementById('detailDuration').textContent = data.duration + ' months';
@@ -181,18 +181,67 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Live search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('course-search');
+    const table = document.getElementById('courses-table');
+    const noResults = document.getElementById('no-results');
+
+    if (searchInput && table) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const rows = table.querySelectorAll('tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            if (noResults) {
+                if (visibleCount === 0) {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                }
+            }
+        });
+    }
+});
 </script>
 
-<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <h1 class="text-2xl font-bold text-gray-800">All Courses</h1>
-        <a href="<?php echo BASE_URL; ?>/admin/controller/course_management.php" 
-           class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-5 rounded-lg transition-colors shadow-sm hover:shadow-md">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Add Course
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Search Bar -->
+            <div class="relative w-full sm:w-64">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input
+                    type="text"
+                    id="course-search"
+                    placeholder="Search courses..."
+                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+                >
+            </div>
+            <a href="<?php echo BASE_URL; ?>/admin/controller/course_management.php" 
+               class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-5 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Course
+            </a>
+        </div>
     </div>
 
     <?php if (!empty($message)): ?>
@@ -214,9 +263,9 @@ document.addEventListener('DOMContentLoaded', function() {
             <p class="mt-4 text-gray-500 text-lg">No courses available.</p>
         </div>
     <?php else: ?>
-        <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
+        <div class="bg-white shadow-sm rounded-2xl overflow-hidden border border-gray-200">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
+                <table class="min-w-full divide-y divide-gray-200" id="courses-table">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Course</th>
@@ -232,7 +281,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         <?php foreach ($courses as $course): ?>
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <p class="text-sm font-semibold text-gray-900"><?php echo htmlspecialchars($course['course_name']); ?></p>
+                                    <div class="flex items-center gap-3">
+                                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                            </svg>
+                                        </span>
+                                        <p class="text-sm font-semibold text-gray-900"><?php echo htmlspecialchars($course['course_name']); ?></p>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                     <?php echo htmlspecialchars($course['duration']); ?> months
@@ -259,6 +315,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button type="button" 
+                                            onclick='showDetail(<?php echo json_encode($course); ?>)'
+                                            class="text-gray-400 hover:text-indigo-600 mr-3 transition-colors" title="View Details">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </button>
+                                    <button type="button" 
                                             onclick='showEdit(<?php echo json_encode($course); ?>)'
                                             class="text-indigo-600 hover:text-indigo-900 mr-3 transition-colors">
                                         Edit
@@ -275,50 +339,57 @@ document.addEventListener('DOMContentLoaded', function() {
                     </tbody>
                 </table>
             </div>
+            <!-- No results message -->
+            <div id="no-results" class="hidden p-8 text-center text-gray-500">
+                No matching courses found.
+            </div>
         </div>
 
         <!-- Dropdown section for course details (improved) -->
-        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Course Details</h2>
-            <div class="max-w-md">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Select a Course</label>
-                <select id="courseSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                    <option value="">-- Select Course --</option>
-                    <?php foreach ($courses as $course): ?>
-                        <option value="<?php echo $course['id']; ?>"><?php echo htmlspecialchars($course['course_name']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div id="courseDetails" class="mt-6 hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-xs text-gray-500 uppercase font-medium">Duration</p>
-                        <p class="font-medium text-gray-900 mt-1" id="detailDuration2"></p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-xs text-gray-500 uppercase font-medium">Admission Fee</p>
-                        <p class="font-medium text-gray-900 mt-1" id="detailAdmission2"></p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-xs text-gray-500 uppercase font-medium">Total Price</p>
-                        <p class="font-medium text-gray-900 mt-1" id="detailTotal2"></p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-xs text-gray-500 uppercase font-medium">Skill Level</p>
-                        <p class="font-medium text-gray-900 mt-1" id="detailSkill2"></p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-xs text-gray-500 uppercase font-medium">Schedule</p>
-                        <p class="font-medium text-gray-900 mt-1" id="detailSchedule2"></p>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-xs text-gray-500 uppercase font-medium">Class Hours</p>
-                        <p class="font-medium text-gray-900 mt-1" id="detailClassHours2"></p>
-                    </div>
+        <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="h-1.5 bg-gradient-to-r from-indigo-600 via-violet-500 to-indigo-600"></div>
+            <div class="p-6 sm:p-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Course Details</h2>
+                <div class="max-w-md">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Select a Course</label>
+                    <select id="courseSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        <option value="">-- Select Course --</option>
+                        <?php foreach ($courses as $course): ?>
+                            <option value="<?php echo $course['id']; ?>"><?php echo htmlspecialchars($course['course_name']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
-                <div class="mt-4">
-                    <p class="text-xs text-gray-500 uppercase font-medium">Outline</p>
-                    <div id="detailOutline2" class="mt-2 bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-line"></div>
+                <div id="courseDetails" class="mt-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium">Duration</p>
+                            <p class="font-medium text-gray-900 mt-1" id="detailDuration2"></p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium">Admission Fee</p>
+                            <p class="font-medium text-gray-900 mt-1" id="detailAdmission2"></p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium">Total Price</p>
+                            <p class="font-medium text-gray-900 mt-1" id="detailTotal2"></p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium">Skill Level</p>
+                            <p class="font-medium text-gray-900 mt-1" id="detailSkill2"></p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium">Schedule</p>
+                            <p class="font-medium text-gray-900 mt-1" id="detailSchedule2"></p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium">Class Hours</p>
+                            <p class="font-medium text-gray-900 mt-1" id="detailClassHours2"></p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Outline</p>
+                        <div id="detailOutline2" class="mt-2 bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-line"></div>
+                    </div>
                 </div>
             </div>
         </div>
