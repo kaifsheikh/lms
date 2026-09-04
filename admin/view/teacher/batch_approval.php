@@ -228,19 +228,23 @@
                     <input type="hidden" name="action" value="transfer_student">
                     
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Current Batch</label>
-                        <select id="transfer_current_batch" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                            <option value="">-- Select Current Batch --</option>
-                            <?php foreach ($batches as $batch): ?>
-                                <option value="<?php echo $batch['id']; ?>"><?php echo htmlspecialchars($batch['batch_name']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Current Batch</label>
+<select id="transfer_current_batch" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+    <option value="">-- Select Current Batch --</option>
+    <?php foreach ($batches as $batch): ?>
+        <option value="<?php echo $batch['id']; ?>">
+            <?php echo htmlspecialchars(
+                $batch['batch_name'] . ' (' . $batch['batch_time'] . ') - Teacher: ' . $batch['teacher_name']
+            ); ?>
+        </option>
+    <?php endforeach; ?>
+</select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Student</label>
-                        <select id="transfer_student_select" name="student_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                            <option value="">-- Select Student --</option>
-                        </select>
+                       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Student</label>
+<select id="transfer_student_select" name="student_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+    <option value="">-- Select Student --</option>
+</select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Destination Batch</label>
@@ -324,6 +328,7 @@
 const allModals = ['createBatchModal', 'addStudentModal', 'removeStudentModal', 'transferStudentModal'];
 const studentBatchMap = <?php echo json_encode($student_batch_map); ?>;
 const allStudents = <?php echo json_encode($all_students); ?>;
+const batchTeacherMap = <?php echo json_encode(array_column($batches, 'teacher_name', 'id')); ?>;
 
 function openModal(modalId) {
     allModals.forEach(id => document.getElementById(id).classList.add('hidden'));
@@ -334,24 +339,28 @@ function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
     document.body.style.overflow = '';
 }
-function populateStudentSelect(selectElement, studentsArray) {
+
+function populateStudentSelect(selectElement, studentsArray, batchId) {
     selectElement.innerHTML = '<option value="">-- Select Student --</option>';
+    const teacherName = batchTeacherMap[batchId] || '';
     studentsArray.forEach(student => {
         const opt = document.createElement('option');
         opt.value = student.id;
-        opt.textContent = student.full_name + ' (' + student.student_id + ')';
+        opt.textContent = student.full_name + ' (' + student.student_id + ') - Teacher: ' + teacherName;
         selectElement.appendChild(opt);
     });
 }
+
 document.getElementById('remove_batch_select').addEventListener('change', function() {
     const batchId = this.value;
     const filtered = allStudents.filter(student => studentBatchMap[student.id] && studentBatchMap[student.id].batch_id == batchId);
-    populateStudentSelect(document.getElementById('remove_student_select'), filtered);
+    populateStudentSelect(document.getElementById('remove_student_select'), filtered, batchId);
 });
+
 document.getElementById('transfer_current_batch').addEventListener('change', function() {
     const batchId = this.value;
     const filtered = allStudents.filter(student => studentBatchMap[student.id] && studentBatchMap[student.id].batch_id == batchId);
-    populateStudentSelect(document.getElementById('transfer_student_select'), filtered);
+    populateStudentSelect(document.getElementById('transfer_student_select'), filtered, batchId);
 });
 
 // Live search
