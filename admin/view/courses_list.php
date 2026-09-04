@@ -1,9 +1,9 @@
 <?php include HEADER; ?>
 
-<!-- Detail Modal (existing, outline ke liye bhi inline style add) -->
-<div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50">
+<!-- Detail Modal (improved) -->
+<div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 transform transition-all">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
                 <h3 class="text-xl font-bold text-gray-900" id="detailModalTitle">Course Details</h3>
                 <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
@@ -38,16 +38,16 @@
             
             <div class="border-t border-gray-200 pt-4">
                 <p class="text-xs text-gray-500 uppercase font-medium mb-2">Course Outline</p>
-                <div id="detailOutline" class="text-sm text-gray-700 whitespace-pre-line bg-gray-50 rounded-lg p-4" style="white-space: pre-line;"></div>
+                <div id="detailOutline" class="text-sm text-gray-700 whitespace-pre-line bg-gray-50 rounded-lg p-4"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Edit Modal (existing) -->
-<div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50">
+<!-- Edit Modal (improved) -->
+<div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6 transform transition-all">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
                 <h3 class="text-xl font-bold text-gray-900">Edit Course</h3>
                 <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
@@ -60,60 +60,60 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Course Name:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Course Name</label>
                         <input type="text" name="course_name" id="editCourseName" required
-                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Duration (months):</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Duration (months)</label>
                         <input type="number" name="duration" id="editDuration" min="1" required
-                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Admission Fee:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Admission Fee</label>
                         <input type="number" step="0.01" name="admission_fee" id="editAdmission" min="0" required
-                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Total Price:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Total Price</label>
                         <input type="number" step="0.01" name="total_price" id="editTotal" min="0" required
-                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Skill Level:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Skill Level</label>
                         <select name="skill_level" id="editSkill" required
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                             <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
                             <option value="Advanced">Advanced</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Schedule:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Schedule</label>
                         <input type="text" name="schedule" id="editSchedule" required
-                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Class Hours:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Class Hours</label>
                         <input type="text" name="class_hours" id="editClassHours" required
-                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     </div>
                 </div>
                 
                 <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Course Outline:</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Course Outline</label>
                     <textarea name="outline" id="editOutline" rows="6" 
-                              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                              placeholder="Har line par ek point likhein..."></textarea>
+                              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-y"
+                              placeholder="One point per line..."></textarea>
                 </div>
                 
-                <div class="mt-4 flex justify-end space-x-2">
+                <div class="mt-6 flex justify-end space-x-3">
                     <button type="button" onclick="closeEditModal()" 
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                         Cancel
                     </button>
                     <button type="submit" 
-                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
+                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow-md">
                         Update Course
                     </button>
                 </div>
@@ -123,7 +123,7 @@
 </div>
 
 <script>
-// Modal functions (existing)
+// Modal functions (kept as is, with minor additions)
 function showDetail(data) {
     document.getElementById('detailModalTitle').textContent = data.course_name;
     document.getElementById('detailDuration').textContent = data.duration + ' months';
@@ -184,90 +184,105 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <h1 class="text-2xl font-bold text-gray-800">All Courses</h1>
         <a href="<?php echo BASE_URL; ?>/admin/controller/course_management.php" 
-           class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg">
-            + Add Course
+           class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-5 rounded-lg transition-colors shadow-sm hover:shadow-md">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Course
         </a>
     </div>
 
     <?php if (!empty($message)): ?>
-        <p class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4"><?php echo htmlspecialchars($message); ?></p>
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-lg">
+            <p class="text-green-700"><?php echo htmlspecialchars($message); ?></p>
+        </div>
     <?php endif; ?>
     <?php if (!empty($error)): ?>
-        <p class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"><?php echo htmlspecialchars($error); ?></p>
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
+            <p class="text-red-700"><?php echo htmlspecialchars($error); ?></p>
+        </div>
     <?php endif; ?>
 
     <?php if (empty($courses)): ?>
-        <div class="text-center py-12">
-            <p class="text-gray-500 text-lg">کوئی کورس موجود نہیں۔</p>
+        <div class="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-200">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p class="mt-4 text-gray-500 text-lg">No courses available.</p>
         </div>
     <?php else: ?>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Course</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Duration</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Fees</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Skill</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Schedule</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Class Hours</th>
-                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php foreach ($courses as $course): ?>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <p class="text-sm font-semibold text-gray-900"><?php echo htmlspecialchars($course['course_name']); ?></p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                <?php echo htmlspecialchars($course['duration']); ?> months
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                <p>Admission: Rs. <?php echo number_format($course['admission_fee']); ?></p>
-                                <p class="text-xs text-gray-400">Total: Rs. <?php echo number_format($course['total_price']); ?></p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    <?php echo ($course['skill_level'] === 'Advanced') ? 'bg-purple-100 text-purple-800' : (($course['skill_level'] === 'Intermediate') ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'); ?>">
-                                    <?php echo htmlspecialchars($course['skill_level']); ?>
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                <?php echo htmlspecialchars($course['schedule']); ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                <?php echo htmlspecialchars($course['class_hours']); ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <!-- Detail button removed from here -->
-                                <button type="button" 
-                                        onclick='showEdit(<?php echo json_encode($course); ?>)'
-                                        class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                    Edit
-                                </button>
-                                <form method="POST" action="" class="inline-block" onsubmit="return confirm('Delete this course?');">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
-                                    <input type="hidden" name="action" value="delete_course">
-                                    <input type="hidden" name="course_id" value="<?php echo $course['id']; ?>">
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                </form>
-                            </td>
+        <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Course</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Duration</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Fees</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Skill</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Schedule</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Class Hours</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <?php foreach ($courses as $course): ?>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <p class="text-sm font-semibold text-gray-900"><?php echo htmlspecialchars($course['course_name']); ?></p>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?php echo htmlspecialchars($course['duration']); ?> months
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <p>Admission: Rs. <?php echo number_format($course['admission_fee']); ?></p>
+                                    <p class="text-xs text-gray-400">Total: Rs. <?php echo number_format($course['total_price']); ?></p>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                        <?php 
+                                        if ($course['skill_level'] === 'Advanced') echo 'bg-purple-100 text-purple-800';
+                                        elseif ($course['skill_level'] === 'Intermediate') echo 'bg-blue-100 text-blue-800';
+                                        else echo 'bg-green-100 text-green-800';
+                                        ?>">
+                                        <?php echo htmlspecialchars($course['skill_level']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?php echo htmlspecialchars($course['schedule']); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?php echo htmlspecialchars($course['class_hours']); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button type="button" 
+                                            onclick='showEdit(<?php echo json_encode($course); ?>)'
+                                            class="text-indigo-600 hover:text-indigo-900 mr-3 transition-colors">
+                                        Edit
+                                    </button>
+                                    <form method="POST" action="" class="inline-block" onsubmit="return confirm('Delete this course?');">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+                                        <input type="hidden" name="action" value="delete_course">
+                                        <input type="hidden" name="course_id" value="<?php echo $course['id']; ?>">
+                                        <button type="submit" class="text-red-600 hover:text-red-900 transition-colors">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Dropdown section for course details -->
-        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Course Details</h2>
+        <!-- Dropdown section for course details (improved) -->
+        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Course Details</h2>
             <div class="max-w-md">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Select Course:</label>
-                <select id="courseSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Select a Course</label>
+                <select id="courseSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                     <option value="">-- Select Course --</option>
                     <?php foreach ($courses as $course): ?>
                         <option value="<?php echo $course['id']; ?>"><?php echo htmlspecialchars($course['course_name']); ?></option>
@@ -276,34 +291,34 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div id="courseDetails" class="mt-6 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-sm text-gray-500">Duration</p>
-                        <p class="font-medium" id="detailDuration2"></p>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Duration</p>
+                        <p class="font-medium text-gray-900 mt-1" id="detailDuration2"></p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Admission Fee</p>
-                        <p class="font-medium" id="detailAdmission2"></p>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Admission Fee</p>
+                        <p class="font-medium text-gray-900 mt-1" id="detailAdmission2"></p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Total Price</p>
-                        <p class="font-medium" id="detailTotal2"></p>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Total Price</p>
+                        <p class="font-medium text-gray-900 mt-1" id="detailTotal2"></p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Skill Level</p>
-                        <p class="font-medium" id="detailSkill2"></p>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Skill Level</p>
+                        <p class="font-medium text-gray-900 mt-1" id="detailSkill2"></p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Schedule</p>
-                        <p class="font-medium" id="detailSchedule2"></p>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Schedule</p>
+                        <p class="font-medium text-gray-900 mt-1" id="detailSchedule2"></p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Class Hours</p>
-                        <p class="font-medium" id="detailClassHours2"></p>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 uppercase font-medium">Class Hours</p>
+                        <p class="font-medium text-gray-900 mt-1" id="detailClassHours2"></p>
                     </div>
                 </div>
                 <div class="mt-4">
-                    <p class="text-sm text-gray-500">Outline</p>
-                    <div id="detailOutline2" class="mt-1 whitespace-pre-line bg-gray-50 rounded-lg p-4 text-sm" style="white-space: pre-line;"></div>
+                    <p class="text-xs text-gray-500 uppercase font-medium">Outline</p>
+                    <div id="detailOutline2" class="mt-2 bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-line"></div>
                 </div>
             </div>
         </div>
