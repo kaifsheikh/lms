@@ -205,4 +205,33 @@ public function saveAttendance($batch_id, $date, $attendance_data, $teacher_id)
         return ['success' => false, 'message' => 'Failed to save attendance. Please try again.'];
     }
 }
+
+/**
+ * Get monthly attendance report for a batch and month (YYYY-MM)
+ *
+ * @param int    $batch_id
+ * @param string $month    Format: YYYY-MM
+ * @return array
+ */
+public function getMonthlyAttendanceReport($batch_id, $month) {
+    $start_date = $month . '-01';
+    $end_date   = date('Y-m-t', strtotime($start_date)); // last day of month
+
+    $sql = "SELECT 
+                s.student_id AS student_id,
+                s.full_name  AS full_name,
+                a.date       AS date,
+                a.status     AS status
+            FROM attendance a
+            INNER JOIN students s ON a.student_id = s.id
+            WHERE a.batch_id = ? 
+              AND a.date BETWEEN ? AND ?
+            ORDER BY a.date ASC, s.student_id ASC";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param('iss', $batch_id, $start_date, $end_date);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
 }
