@@ -52,6 +52,12 @@ if ($role === 'admin') {
         ['label' => null, 'items' => [
             ['label' => 'Attendance Progress', 'href' => BASE_URL . '/admin/controller/attendance_progress.php', 'icon' => 'calendar'],
         ]],
+        ['label' => 'Fees', 'items' => [
+            ['label' => 'Fee Management', 'href' => BASE_URL . '/admin/controller/fee_management.php', 'icon' => 'chart'],
+
+            ['label' => 'Fee History Search', 'href' => BASE_URL . '/admin/controller/fee_history_search.php', 'icon' => 'chart'],
+        ]],
+        
     ];
 } elseif ($role === 'teacher') {
     $nav_groups = [
@@ -89,6 +95,7 @@ if ($role === 'admin') {
             ['label' => 'Results', 'href' => BASE_URL . '/student/controller/results.php', 'icon' => 'chart'],
             ['label' => 'My Attendance', 'href' => BASE_URL . '/student/controller/my_attendance.php', 'icon' => 'calendar'],
             ['label' => 'My Classes', 'href' => BASE_URL . '/student/controller/my_classes.php', 'icon' => 'video'],
+            ['label' => 'My Fees', 'href' => BASE_URL . '/student/controller/my_fees.php', 'icon' => 'chart'],
         ]],
     ];
 } else {
