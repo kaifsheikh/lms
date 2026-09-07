@@ -89,21 +89,31 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php foreach ($students_with_fee as $sf): ?>
                     <tr>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo htmlspecialchars($sf['student_code']); ?></td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium"><?php echo htmlspecialchars($sf['full_name']); ?></td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo htmlspecialchars($sf['course_name'] ?? 'N/A'); ?></td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo number_format($sf['total_price'] ?? 0, 2); ?></td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo number_format($sf['total_paid'] ?? 0, 2); ?></td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo number_format($sf['remaining'], 2); ?></td>
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            <?php if ($sf['status'] === 'paid'): ?>
-                                <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Paid</span>
-                            <?php elseif ($sf['status'] === 'partial'): ?>
-                                <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Partial</span>
-                            <?php else: ?>
-                                <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Unpaid</span>
-                            <?php endif; ?>
-                        </td>
+                      <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo htmlspecialchars($sf['student_code']); ?></td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium"><?php echo htmlspecialchars($sf['full_name']); ?></td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo htmlspecialchars($sf['course_name'] ?? 'N/A'); ?></td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo number_format($sf['total_price'] ?? 0, 2); ?></td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm"><?php echo number_format($sf['total_paid'] ?? 0, 2); ?></td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                        <?php
+                            if ($sf['status'] === 'overpaid') {
+                                echo '<span class="text-blue-600 font-medium">+Rs. ' . number_format($sf['overpaid_amount'], 2) . '</span>';
+                            } else {
+                                echo number_format($sf['remaining'], 2);
+                            }
+                        ?>
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                        <?php if ($sf['status'] === 'paid'): ?>
+                            <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Paid</span>
+                        <?php elseif ($sf['status'] === 'partial'): ?>
+                            <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Partial</span>
+                        <?php elseif ($sf['status'] === 'overpaid'): ?>
+                            <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Overpaid</span>
+                        <?php else: ?>
+                            <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Unpaid</span>
+                        <?php endif; ?>
+                    </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -20,13 +20,15 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Status</p>
-                    <?php if ($summary['status'] === 'paid'): ?>
-                        <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Paid</span>
-                    <?php elseif ($summary['status'] === 'partial'): ?>
-                        <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Partial</span>
-                    <?php else: ?>
-                        <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Unpaid</span>
-                    <?php endif; ?>
+               <?php if ($summary['status'] === 'paid'): ?>
+    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Paid</span>
+<?php elseif ($summary['status'] === 'partial'): ?>
+    <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Partial</span>
+<?php elseif ($summary['status'] === 'overpaid'): ?>
+    <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Overpaid (Credit: Rs. <?php echo number_format($summary['overpaid_amount'], 2); ?>)</span>
+<?php else: ?>
+    <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Unpaid</span>
+<?php endif; ?>
                 </div>
             </div>
         </div>

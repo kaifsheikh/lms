@@ -85,10 +85,17 @@ class FeePayment
         $result = $this->conn->query($sql);
         if ($result) {
             while ($row = $result->fetch_assoc()) {
-                $row['remaining'] = max(0, $row['total_price'] - $row['total_paid']);
-                if ($row['total_paid'] <= 0) $row['status'] = 'unpaid';
-                elseif ($row['total_paid'] >= $row['total_price']) $row['status'] = 'paid';
-                else $row['status'] = 'partial';
+                if ($row['total_paid'] > $row['total_price']) {
+                    $row['overpaid_amount'] = $row['total_paid'] - $row['total_price'];
+                    $row['remaining'] = 0;
+                    $row['status'] = 'overpaid';
+                } else {
+                    $row['overpaid_amount'] = 0;
+                    $row['remaining'] = $row['total_price'] - $row['total_paid'];
+                    if ($row['total_paid'] <= 0) $row['status'] = 'unpaid';
+                    elseif ($row['total_paid'] >= $row['total_price']) $row['status'] = 'paid';
+                    else $row['status'] = 'partial';
+                }
                 $students[] = $row;
             }
         }
@@ -119,10 +126,17 @@ class FeePayment
         $stmt->close();
 
         if ($row) {
-            $row['remaining'] = max(0, $row['total_price'] - $row['total_paid']);
-            if ($row['total_paid'] <= 0) $row['status'] = 'unpaid';
-            elseif ($row['total_paid'] >= $row['total_price']) $row['status'] = 'paid';
-            else $row['status'] = 'partial';
+            if ($row['total_paid'] > $row['total_price']) {
+                $row['overpaid_amount'] = $row['total_paid'] - $row['total_price'];
+                $row['remaining'] = 0;
+                $row['status'] = 'overpaid';
+            } else {
+                $row['overpaid_amount'] = 0;
+                $row['remaining'] = $row['total_price'] - $row['total_paid'];
+                if ($row['total_paid'] <= 0) $row['status'] = 'unpaid';
+                elseif ($row['total_paid'] >= $row['total_price']) $row['status'] = 'paid';
+                else $row['status'] = 'partial';
+            }
         }
         return $row;
     }
