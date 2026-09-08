@@ -28,6 +28,7 @@ function nav_icon_path($key) {
         'video'     => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/>',
         'login'     => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3 3m0 0l-3 3m3-3H3"/>',
         'user-plus' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/>',
+        'history'   => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>',
     ];
     return $icons[$key] ?? $icons['book'];
 }
@@ -56,10 +57,8 @@ if ($role === 'admin') {
         ]],
         ['label' => 'Fees Management', 'items' => [
             ['label' => 'Fee Management', 'href' => BASE_URL . '/admin/controller/fee_management.php', 'icon' => 'chart'],
-
             ['label' => 'Fee History Search', 'href' => BASE_URL . '/admin/controller/fee_history_search.php', 'icon' => 'history'],
         ]],
-        
     ];
 } elseif ($role === 'teacher') {
     $nav_groups = [
@@ -127,6 +126,7 @@ function nav_is_active($href, $current_path) {
         /* Sidebar transition and collapse styles */
         #app-sidebar {
             transition: transform 0.3s ease-in-out;
+            box-shadow: 4px 0 12px -4px rgba(0, 0, 0, 0.05);
         }
         body.sidebar-collapsed #app-sidebar {
             transform: translateX(-100%);
@@ -144,7 +144,7 @@ function nav_is_active($href, $current_path) {
         }
     </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased flex flex-col">
 
 <!-- Sidebar -->
 <aside id="app-sidebar"
@@ -192,7 +192,7 @@ function nav_is_active($href, $current_path) {
             <?php foreach ($group['items'] as $item): ?>
                 <?php $active = nav_is_active($item['href'], $current_path); ?>
                 <a href="<?= $item['href'] ?>"
-                   class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors <?= $active ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' ?>">
+                   class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 <?= $active ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 hover:translate-x-0.5' ?>">
                     <svg class="h-[18px] w-[18px] flex-shrink-0 <?= $active ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-500' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
                         <?= nav_icon_path($item['icon'] ?? 'book') ?>
                     </svg>
@@ -208,8 +208,8 @@ function nav_is_active($href, $current_path) {
     <!-- Bottom user info / logout -->
     <div class="flex-shrink-0 border-t border-slate-100 p-3 space-y-2">
         <?php if (isLoggedIn()): ?>
-            <div class="flex items-center gap-2.5 rounded-lg border border-slate-200 px-3 py-2">
-                <span class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
+            <div class="flex items-center gap-2.5 rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2">
+                <span class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                         <path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/>
                     </svg>
@@ -218,7 +218,7 @@ function nav_is_active($href, $current_path) {
             </div>
             <form action="<?= BASE_URL ?>/accounts/controller/logout.php" method="POST">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
-                <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors">
+                <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
                     </svg>
@@ -278,7 +278,6 @@ function nav_is_active($href, $current_path) {
         }
         function toggleSidebarCollapse() {
             body.classList.toggle('sidebar-collapsed');
-            // Toggle visibility of floating open button
             if (body.classList.contains('sidebar-collapsed')) {
                 desktopOpenBtn.classList.remove('hidden');
                 desktopOpenBtn.classList.add('flex');
@@ -299,7 +298,6 @@ function nav_is_active($href, $current_path) {
         if (collapseBtn) collapseBtn.addEventListener('click', toggleSidebarCollapse);
         if (desktopOpenBtn) desktopOpenBtn.addEventListener('click', openSidebarFromFloating);
 
-        // Initialize floating button state
         if (body.classList.contains('sidebar-collapsed')) {
             desktopOpenBtn.classList.remove('hidden');
             desktopOpenBtn.classList.add('flex');
@@ -318,5 +316,5 @@ function nav_is_active($href, $current_path) {
 </script>
 
 <!-- Page content wrapper -->
-<div class="main-content-wrapper flex flex-col min-h-screen lg:ml-64">
+<div class="main-content-wrapper flex flex-col flex-1 lg:ml-64">
 <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
