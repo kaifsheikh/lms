@@ -8,12 +8,14 @@ requireRole(['admin']);
 
 $search_results = null;
 $search_error = '';
+$summary = null;
 
 $feeModel = new FeePayment($conn);
 
 if (isset($_GET['student_id']) && trim($_GET['student_id']) !== '') {
     $search_term = trim($_GET['student_id']);
     $search_results = $feeModel->getStudentFeeHistoryByStudentId($search_term);
+    $summary = $feeModel->getStudentFeeSummaryByStudentId($search_term);
     if (empty($search_results)) {
         $search_error = 'No fee records found for this Student ID.';
     }

@@ -180,4 +180,38 @@ class FeePayment
     $stmt->close();
     return $payments;
 }
+
+public function getStudentFeeSummaryByStudentId($student_id_str)
+{
+    $stmt = $this->conn->prepare("
+        SELECT 
+            s.id AS student_id,
+            s.student_id AS student_code,
+            s.full_name,
+            c.course_name,
+            c.total_price,
+            c.duration,
+            COALESCE(SUM(fp.amount_paid), 0) AS total_paid,
+            COUNT(DISTINCT fp.payment_month) AS months_paid
+        FROM students s
+        LEFT JOIN courses c ON s.course_name = c.course_name
+        LEFT JOIN fee_payments fp ON fp.student_id = s.id
+        WHERE s.student_id = ?
+        GROUP BY s.id, s.student_id, s.full_name, c.course_name, c.total_price, c.duration
+    ");
+    $stmt->bind_param("s", $student_id_str);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+
+    if ($row) {
+        $row['remaining'] = max(0, $row['total_price'] - $row['total_paid']);
+        $row['overpaid'] = max(0, $row['total_paid'] - $row['total_price']);
+        if ($row['total_paid'] <= 0) $row['status'] = 'unpaid';
+        elseif ($row['total_paid'] >= $row['total_price']) $row['status'] = 'paid';
+        else $row['status'] = 'partial';
+    }
+    return $row;
+}
 }
