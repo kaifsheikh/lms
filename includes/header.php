@@ -37,9 +37,11 @@ if ($role === 'admin') {
         ['label' => null, 'items' => [
             ['label' => 'Dashboard', 'href' => BASE_URL . '/admin/controller/dashboard.php', 'icon' => 'home'],
         ]],
-        ['label' => 'Approvals', 'items' => [
-            ['label' => 'Teacher Approval', 'href' => BASE_URL . '/admin/controller/teacher/approval.php', 'icon' => 'check'],
-            ['label' => 'Batch Approval', 'href' => BASE_URL . '/admin/controller/teacher/batch_approval.php', 'icon' => 'check'],
+        ['label' => 'Teacher Management', 'items' => [
+            ['label' => 'Teacher Management', 'href' => BASE_URL . '/admin/controller/teacher/approval.php', 'icon' => 'check'],
+        ]],
+        ['label' => 'Batch Management', 'items' => [
+            ['label' => 'Batch Management', 'href' => BASE_URL . '/admin/controller/teacher/batch_approval.php', 'icon' => 'check'],
         ]],
         ['label' => 'Course Management', 'items' => [
             ['label' => 'Courses', 'href' => BASE_URL . '/admin/controller/course_management.php', 'icon' => 'book'],
@@ -49,13 +51,13 @@ if ($role === 'admin') {
             ['label' => 'Student Register', 'href' => BASE_URL . '/admin/controller/student/register.php', 'icon' => 'user-plus'],
             ['label' => 'Manage Students', 'href' => BASE_URL . '/admin/controller/student/manage.php', 'icon' => 'users'],
         ]],
-        ['label' => null, 'items' => [
+        ['label' => 'Attendance', 'items' => [
             ['label' => 'Attendance Progress', 'href' => BASE_URL . '/admin/controller/attendance_progress.php', 'icon' => 'calendar'],
         ]],
-        ['label' => 'Fees', 'items' => [
+        ['label' => 'Fees Management', 'items' => [
             ['label' => 'Fee Management', 'href' => BASE_URL . '/admin/controller/fee_management.php', 'icon' => 'chart'],
 
-            ['label' => 'Fee History Search', 'href' => BASE_URL . '/admin/controller/fee_history_search.php', 'icon' => 'chart'],
+            ['label' => 'Fee History Search', 'href' => BASE_URL . '/admin/controller/fee_history_search.php', 'icon' => 'history'],
         ]],
         
     ];

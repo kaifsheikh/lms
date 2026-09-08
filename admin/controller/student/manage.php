@@ -18,7 +18,7 @@ if (isset($_SESSION['student_error'])) {
     unset($_SESSION['student_error']);
 }
 
-// Model object
+// Model objects
 $studentModel = new Student($conn);
 $batchModel = new Batch($conn);
 
@@ -30,22 +30,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = $_POST['action'] ?? '';
 
-if ($action === 'assign_teacher') {
-    $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
-    $teacher_id = filter_input(INPUT_POST, 'teacher_id', FILTER_VALIDATE_INT);
+    if ($action === 'assign_teacher') {
+        $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
+        $teacher_id = filter_input(INPUT_POST, 'teacher_id', FILTER_VALIDATE_INT);
 
-    if (!$student_id || $student_id <= 0 || !$teacher_id || $teacher_id <= 0) {
-        $error = 'Invalid student or teacher selected.';
-    } else {
-        // Batch model ke central method se assign karo (batch remove ke saath)
-        $result = $batchModel->assignStudentToTeacherAndBatch($student_id, $teacher_id, null);
-        if ($result['success']) {
-            $message = $result['message'];
+        if (!$student_id || $student_id <= 0 || !$teacher_id || $teacher_id <= 0) {
+            $error = 'Invalid student or teacher selected.';
         } else {
-            $error = $result['message'];
+            $result = $batchModel->assignStudentToTeacherAndBatch($student_id, $teacher_id, null);
+            if ($result['success']) {
+                $message = $result['message'];
+            } else {
+                $error = $result['message'];
+            }
         }
-    }
-}elseif ($action === 'update_status') {
+    } elseif ($action === 'update_status') {
         $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
         $new_status = $_POST['status'] ?? '';
 
@@ -84,6 +83,21 @@ if (isset($_GET['student_id']) && trim($_GET['student_id']) !== '') {
         $search_error = 'No student found with that Student ID.';
     }
 }
+
+// ============ STATS FOR VIEW ============
+$total_students = count($students);
+$total_teachers = count($teachers);
+
+$active_count = 0;
+$pending_count = 0;
+$process_count = 0;
+
+foreach ($students as $s) {
+    if ($s['status'] === 'active') $active_count++;
+    elseif ($s['status'] === 'pending') $pending_count++;
+    elseif ($s['status'] === 'process') $process_count++;
+}
+// =======================================
 
 include BASE_PATH . 'admin/view/student/manage.php';
 ?>
