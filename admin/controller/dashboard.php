@@ -10,12 +10,12 @@ $total_teachers = 0;
 $pending_teachers = 0;
 $total_students = 0;
 $active_students = 0;
-$total_accountants = 0;
 $total_batches = 0;
 $pending_batches = 0;
 $total_quizzes = 0;
 $total_classes = 0;
 $total_attendance_records = 0;
+$total_courses = 0;
 
 // Teachers
 $stmt = $conn->query("SELECT 
@@ -40,11 +40,6 @@ if ($row = $stmt->fetch_assoc()) {
 }
 $stmt->close();
 
-// Accountants
-$stmt = $conn->query("SELECT COUNT(*) AS cnt FROM users WHERE role = 'accountant' AND status = 'approved'");
-$total_accountants = $stmt->fetch_assoc()['cnt'] ?? 0;
-$stmt->close();
-
 // Batches
 $stmt = $conn->query("SELECT 
     COUNT(*) AS total,
@@ -54,6 +49,11 @@ if ($row = $stmt->fetch_assoc()) {
     $total_batches = $row['total'] ?? 0;
     $pending_batches = $row['pending'] ?? 0;
 }
+$stmt->close();
+
+// Courses
+$stmt = $conn->query("SELECT COUNT(*) AS cnt FROM courses");
+$total_courses = $stmt->fetch_assoc()['cnt'] ?? 0;
 $stmt->close();
 
 // Quizzes
