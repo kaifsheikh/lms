@@ -214,4 +214,20 @@ public function getStudentFeeSummaryByStudentId($student_id_str)
     }
     return $row;
 }
+
+public function updatePayment($payment_id, $amount_paid, $payment_date, $payment_month, $remarks)
+{
+    $stmt = $this->conn->prepare("
+        UPDATE fee_payments 
+        SET amount_paid = ?, payment_date = ?, payment_month = ?, remarks = ?
+        WHERE id = ?
+    ");
+    $stmt->bind_param("dsssi", $amount_paid, $payment_date, $payment_month, $remarks, $payment_id);
+    $success = $stmt->execute();
+    if (!$success) {
+        error_log("Update payment failed: " . $stmt->error);
+    }
+    $stmt->close();
+    return $success;
+}
 }
