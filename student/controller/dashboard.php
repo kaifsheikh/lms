@@ -13,7 +13,7 @@ $attempted_quizzes = 0;
 $upcoming_classes = 0;
 $attendance_percentage = 0;
 
-// Available quizzes (active, not attempted, assigned to student's batches)
+// Available quizzes
 $stmt = $conn->prepare("
     SELECT COUNT(DISTINCT q.id) AS cnt
     FROM quizzes q
@@ -27,19 +27,17 @@ $stmt = $conn->prepare("
 ");
 $stmt->bind_param("ii", $student_id, $student_id);
 $stmt->execute();
-$result = $stmt->get_result();
-$available_quizzes = $result->fetch_assoc()['cnt'] ?? 0;
+$available_quizzes = $stmt->get_result()->fetch_assoc()['cnt'] ?? 0;
 $stmt->close();
 
 // Attempted quizzes
 $stmt = $conn->prepare("SELECT COUNT(*) AS cnt FROM quiz_attempts WHERE student_id = ?");
 $stmt->bind_param("i", $student_id);
 $stmt->execute();
-$result = $stmt->get_result();
-$attempted_quizzes = $result->fetch_assoc()['cnt'] ?? 0;
+$attempted_quizzes = $stmt->get_result()->fetch_assoc()['cnt'] ?? 0;
 $stmt->close();
 
-// Upcoming classes count
+// Upcoming classes
 $stmt = $conn->prepare("
     SELECT COUNT(DISTINCT oc.id) AS cnt
     FROM online_classes oc
@@ -49,16 +47,12 @@ $stmt = $conn->prepare("
 ");
 $stmt->bind_param("i", $student_id);
 $stmt->execute();
-$result = $stmt->get_result();
-$upcoming_classes = $result->fetch_assoc()['cnt'] ?? 0;
+$upcoming_classes = $stmt->get_result()->fetch_assoc()['cnt'] ?? 0;
 $stmt->close();
 
-// Attendance percentage (present + late out of total)
+// Attendance percentage
 $attendance_records = [];
-$stmt = $conn->prepare("
-    SELECT status FROM attendance
-    WHERE student_id = ?
-");
+$stmt = $conn->prepare("SELECT status FROM attendance WHERE student_id = ?");
 $stmt->bind_param("i", $student_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -76,7 +70,7 @@ foreach ($attendance_records as $status) {
 }
 $attendance_percentage = ($total_attendance > 0) ? round(($present_like / $total_attendance) * 100, 2) : 0;
 
-// ---------- RECENT QUIZ RESULTS (last 3) ----------
+// ---------- RECENT QUIZ RESULTS ----------
 $recent_results = [];
 $stmt = $conn->prepare("
     SELECT q.title, qa.percentage, qa.submitted_at
@@ -94,7 +88,7 @@ while ($row = $result->fetch_assoc()) {
 }
 $stmt->close();
 
-// ---------- UPCOMING CLASSES (next 3) ----------
+// ---------- UPCOMING CLASSES ----------
 $upcoming_classes_list = [];
 $stmt = $conn->prepare("
     SELECT oc.title, oc.start_time, oc.end_time, oc.token
