@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 08, 2026 at 10:37 AM
+-- Generation Time: Sep 15, 2026 at 09:36 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -37,27 +37,6 @@ CREATE TABLE `attendance` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `attendance`
---
-
-INSERT INTO `attendance` (`id`, `batch_id`, `student_id`, `date`, `status`, `marked_by`, `created_at`) VALUES
-(2, 29, 39, '2026-09-04', 'absent', 13, '2026-09-05 11:20:55'),
-(3, 29, 41, '2026-09-04', 'present', 13, '2026-09-05 11:20:55'),
-(4, 29, 40, '2026-09-04', 'present', 13, '2026-09-05 11:20:55'),
-(5, 29, 39, '2026-09-03', 'present', 13, '2026-09-05 11:21:12'),
-(6, 29, 41, '2026-09-03', 'present', 13, '2026-09-05 11:21:12'),
-(7, 29, 40, '2026-09-03', 'present', 13, '2026-09-05 11:21:12'),
-(8, 29, 39, '2026-09-01', 'late', 13, '2026-09-05 11:21:28'),
-(9, 29, 41, '2026-09-01', 'late', 13, '2026-09-05 11:21:28'),
-(10, 29, 40, '2026-09-01', 'present', 13, '2026-09-05 11:21:28'),
-(11, 29, 39, '2026-09-02', 'leave', 13, '2026-09-05 11:22:07'),
-(12, 29, 41, '2026-09-02', 'leave', 13, '2026-09-05 11:22:07'),
-(13, 29, 40, '2026-09-02', 'leave', 13, '2026-09-05 11:22:07'),
-(14, 29, 39, '2026-08-03', 'present', 13, '2026-09-05 11:26:12'),
-(15, 29, 41, '2026-08-03', 'present', 13, '2026-09-05 11:26:12'),
-(16, 29, 40, '2026-08-03', 'present', 13, '2026-09-05 11:26:12');
-
 -- --------------------------------------------------------
 
 --
@@ -74,14 +53,6 @@ CREATE TABLE `batches` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `batches`
---
-
-INSERT INTO `batches` (`id`, `batch_name`, `starting_date`, `batch_time`, `teacher_id`, `status`, `created_at`) VALUES
-(29, 'Web Development', '2026-09-04', '5:00 - 7:00', 13, 'approved', '2026-09-04 18:33:59'),
-(30, 'Web Development', '2026-09-04', '5:00 - 7:00', 11, 'approved', '2026-09-04 18:34:10');
-
 -- --------------------------------------------------------
 
 --
@@ -93,15 +64,6 @@ CREATE TABLE `batch_students` (
   `batch_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `batch_students`
---
-
-INSERT INTO `batch_students` (`id`, `batch_id`, `student_id`) VALUES
-(31, 29, 41),
-(33, 29, 39),
-(35, 29, 40);
 
 -- --------------------------------------------------------
 
@@ -116,13 +78,6 @@ CREATE TABLE `class_attendance` (
   `status` enum('present','absent','late') DEFAULT 'present',
   `marked_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `class_attendance`
---
-
-INSERT INTO `class_attendance` (`id`, `class_id`, `student_id`, `status`, `marked_at`) VALUES
-(5, 12, 40, 'present', '2026-09-05 12:15:35');
 
 -- --------------------------------------------------------
 
@@ -143,15 +98,6 @@ CREATE TABLE `courses` (
   `outline` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `courses`
---
-
-INSERT INTO `courses` (`id`, `course_name`, `duration`, `created_at`, `admission_fee`, `total_price`, `skill_level`, `schedule`, `class_hours`, `outline`) VALUES
-(7, 'Web Development', 6, '2026-09-04 18:22:25', '3000.00', '50000.00', 'Intermediate', 'Monday - Friday', '2', 'Your query \"html css or js outlines\" can mean two entirely different things depending on your current context. Because of this ambiguity, both possibilities are outlined below so you can find exactly what you need.\r\n\r\nOption 1: The technical CSS outline property (how to visually draw lines around elements).\r\n\r\nOption 2: A learning/course curriculum outline for HTML, CSS, and JavaScript.\r\n\r\ndo not take up space in the layout. They sit on top of the content and do not change the width or height of the element. [1] (https://www.w3schools.com/css/css_outline.asp)'),
-(8, 'AI', 3, '2026-09-04 18:25:15', '3000.00', '20000.00', 'Intermediate', 'Monday - Friday', '2', 'Get perfectly structured outlines with clear argument progression and smooth transitions. Manus creates logical flow from introduction to conclusion, ensuring each point builds naturally toward your thesis with coherent reasoning and persuasive organization.\r\n\r\nManus automatically searches and integrates credible academic sources into your outline. Our AI identifies relevant research papers, statistics, and expert opinions, then seamlessly weaves evidence into your structure for stronger, fact-based arguments.'),
-(9, 'Trading', 1, '2026-09-07 12:35:34', '10000.00', '10000.00', 'Intermediate', 'Monday - Friday', '2', 'A trading outline is a structured blueprint that defines your trading style, risk rules, market analysis methods, and personal goals. [1] (https://www.scribd.com/document/849560848/Trading-Plan-Outline-SAM)');
-
 -- --------------------------------------------------------
 
 --
@@ -167,18 +113,6 @@ CREATE TABLE `fee_payments` (
   `remarks` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `fee_payments`
---
-
-INSERT INTO `fee_payments` (`id`, `student_id`, `amount_paid`, `payment_date`, `payment_month`, `remarks`, `created_at`) VALUES
-(1, 41, '6000.00', '2026-09-07', 'September', 'Late Fee', '2026-09-07 11:06:43'),
-(2, 39, '6000.00', '2026-08-14', 'August 2026', 'late', '2026-09-07 11:16:55'),
-(3, 40, '7000.00', '2026-07-15', 'July 2026', 'Paid', '2026-09-07 11:28:55'),
-(4, 40, '5000.00', '2026-10-07', 'October 2026', 'Extra Paid', '2026-09-07 11:30:02'),
-(5, 40, '8000.00', '2026-09-07', 'September 2026', 'Complete paid', '2026-09-07 11:32:23'),
-(6, 40, '5000.00', '2026-09-10', 'September 2026', 'asdf', '2026-09-07 11:32:57');
 
 -- --------------------------------------------------------
 
@@ -198,13 +132,6 @@ CREATE TABLE `online_classes` (
   `status` enum('scheduled','live','completed','cancelled') DEFAULT 'scheduled',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `online_classes`
---
-
-INSERT INTO `online_classes` (`id`, `teacher_id`, `batch_id`, `title`, `meet_link`, `token`, `start_time`, `end_time`, `status`, `created_at`) VALUES
-(12, 13, 29, 'asdf', 'https://meet.google.com/byr-ysua-tjc', '22594C3C', '2026-09-05 17:14:00', '2026-09-05 17:17:00', 'scheduled', '2026-09-05 12:14:48');
 
 -- --------------------------------------------------------
 
@@ -314,15 +241,6 @@ CREATE TABLE `students` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `students`
---
-
-INSERT INTO `students` (`id`, `student_id`, `full_name`, `father_name`, `contact_number`, `gender`, `dob`, `address`, `email`, `password`, `joining_date`, `course_name`, `class_timing`, `course_duration`, `student_pic`, `cnic_pic`, `highest_education`, `status`, `teacher_id`, `created_at`) VALUES
-(39, 'STU-34099B', 'Dayan', 'Saaed', '938495843', 'male', '2010-10-04', 'Pakistan Hyderabad , 17000', 'dayan@gmail.com', '$2y$10$X2Vsehw4lRwfe8bVSX7Caelq.68TeKm.TJpQ50vhGYiJ/2YQzeFki', '2026-09-04', 'AI', '5-7', '3', 'stu_6a9b10634069e9.41854669.jpg', 'cnic_6a9b1063407ec8.86186328.jpg', 'matric', 'active', 13, '2026-09-04 18:39:31'),
-(40, 'STU-38C0B1', 'hamza', 'saleem', '23456754', 'male', '1998-10-13', 'Pakistan Hyderabad , 17000', 'hamza@gmail.com', '$2y$10$CvCQDo./BytYp7RA.7E9Nex/jwjm6sCWHm/EDzU46HOjKegbs3DTy', '2026-09-08', 'AI', '6-8', '3', 'stu_6a9b10a38bc843.27053424.jpg', 'cnic_6a9b10a38be5e3.86839255.jpeg', 'undergraduate', 'active', 13, '2026-09-04 18:40:35'),
-(41, 'STU-D5DBD4', 'faizan', 'kaleem', '4567654356', 'male', '2003-10-13', 'Pakistan Hyderabad , 17000', 'faizan@gmail.com', '$2y$10$Is6Inv.VIYeVQ/udaeSep.pX5.sMSKTnvZHZZZPsuAScLWNhD.n5i', '2026-08-11', 'AI', '4-6', '3', 'stu_6a9b10ed5d8263.21729326.jpg', 'cnic_6a9b10ed5d9d90.26112328.jpeg', 'postgraduate', 'active', 13, '2026-09-04 18:41:49');
-
 -- --------------------------------------------------------
 
 --
@@ -345,9 +263,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `role`, `status`, `created_at`) VALUES
-(11, 'Muhammd Kaif Shaikh', 'shahkaif327@gmail.com', '$2y$10$6bti8Kvi16DZHOTIB.wTI.ybSl/c9nOTVlfO3ZV9xupESG/5PExDm', '03108422790', 'teacher', 'approved', '2026-09-02 01:48:42'),
-(12, 'Admin', 'admin@gmail.com', '$2y$10$sh4NJSR6AjTN17nDL.WVEu3UpiJPGsnNBt0o1tZ45UQ3laTb0LzDS', '03108422790', 'admin', 'approved', '2026-09-02 01:49:38'),
-(13, 'Arham', 'arham@gmail.com', '$2y$10$HfLjlU5awgQk48bZiIbyourpZaYd1M2PaCDrVU0qEva5ecOClVFDS', '23457643', 'teacher', 'approved', '2026-09-03 07:23:49');
+(1, 'Muhammad Kaif Shaikh', 'shahkaif327@gmail.com', '$2y$10$TgszsJILZisL4MKyIOoJ/.cmop2aRdsfSAFq/B37SVIxlhryA8XoK', '03108422790', 'teacher', 'approved', '2026-09-15 07:31:14'),
+(2, 'Admin', 'admin@gmail.com', '$2y$10$NTbUx7R0Zl3s.tRkUEAsG.5nhG.WyzLdKqD2fG/s69lLmX0QW2uqC', '03108422790', 'admin', 'approved', '2026-09-15 07:32:48');
 
 --
 -- Indexes for dumped tables
@@ -465,49 +382,49 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `batches`
 --
 ALTER TABLE `batches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `batch_students`
 --
 ALTER TABLE `batch_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `class_attendance`
 --
 ALTER TABLE `class_attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `fee_payments`
 --
 ALTER TABLE `fee_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `online_classes`
 --
 ALTER TABLE `online_classes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `question_options`
@@ -519,7 +436,7 @@ ALTER TABLE `question_options`
 -- AUTO_INCREMENT for table `quizzes`
 --
 ALTER TABLE `quizzes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempts`
@@ -537,13 +454,13 @@ ALTER TABLE `quiz_attempt_history`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
