@@ -14,6 +14,14 @@ $user_name = htmlspecialchars(
 $page_title = ucfirst($role ?: 'Home');
 
 /* ---------------------------------------------------------------------
+ * AJAX (PJAX-style) navigation detection.
+ * When a request comes in via our fetch()-based nav script, we only
+ * output the inner page content (skip doctype/head/sidebar/footer) so
+ * the client can swap it into #page-content without a full reload.
+ * ------------------------------------------------------------------- */
+$is_ajax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+/* ---------------------------------------------------------------------
  * Sidebar navigation data (presentation only — no business logic here).
  * ------------------------------------------------------------------- */
 function nav_icon_path($key) {
@@ -114,7 +122,7 @@ function nav_is_active($href, $current_path) {
     return $rel !== '' && strpos($current_path, $rel) !== false;
 }
 ?>
-
+<?php if (!$is_ajax): ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -313,8 +321,120 @@ function nav_is_active($href, $current_path) {
         onScroll();
         window.addEventListener('scroll', onScroll, { passive: true });
     })();
+
+    // ---- AJAX (PJAX-style) navigation: load internal links without full page reload ----
+    (function () {
+        var contentEl = document.getElementById('page-content');
+        if (!contentEl) return;
+        var BASE = '<?= BASE_URL ?>';
+        var isNavigating = false;
+
+        function isAjaxable(link) {
+            if (!link) return false;
+            var href = link.getAttribute('href');
+            if (!href || href.indexOf('#') === 0 || href.indexOf('mailto:') === 0 || href.indexOf('tel:') === 0 || href.indexOf('javascript:') === 0) return false;
+            if (link.target && link.target !== '_self') return false;
+            if (link.hasAttribute('download') || link.hasAttribute('data-no-ajax')) return false;
+            var url;
+            try { url = new URL(link.href, window.location.href); } catch (e) { return false; }
+            if (url.origin !== window.location.origin) return false;
+            if (url.pathname.indexOf(BASE) !== 0) return false;
+            if (/\.(pdf|jpg|jpeg|png|gif|svg|csv|xlsx|zip|docx)(\?|$)/i.test(url.pathname)) return false;
+            return true;
+        }
+
+        function executeScripts(container) {
+            var scripts = container.querySelectorAll('script');
+            scripts.forEach(function (oldScript) {
+                var newScript = document.createElement('script');
+                for (var i = 0; i < oldScript.attributes.length; i++) {
+                    newScript.setAttribute(oldScript.attributes[i].name, oldScript.attributes[i].value);
+                }
+                newScript.textContent = oldScript.textContent;
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+        }
+
+        function updateActiveNav(url) {
+            try {
+                var path = new URL(url, window.location.origin).pathname;
+                var links = document.querySelectorAll('#app-sidebar nav a[href]');
+                links.forEach(function (a) {
+                    var href = a.getAttribute('href') || '';
+                    var rel = href.indexOf(BASE) === 0 ? href.slice(BASE.length) : href;
+                    var active = rel !== '' && path.indexOf(rel) !== -1;
+                    var icon = a.querySelector('svg');
+                    var dot = a.querySelector('span.ml-auto');
+                    if (active) {
+                        a.classList.add('bg-indigo-50', 'text-indigo-700', 'shadow-sm');
+                        a.classList.remove('text-slate-600');
+                        if (icon) { icon.classList.add('text-indigo-600'); icon.classList.remove('text-slate-400'); }
+                        if (!dot) {
+                            var span = document.createElement('span');
+                            span.className = 'ml-auto h-1.5 w-1.5 rounded-full bg-indigo-600 flex-shrink-0';
+                            a.appendChild(span);
+                        }
+                    } else {
+                        a.classList.remove('bg-indigo-50', 'text-indigo-700', 'shadow-sm');
+                        a.classList.add('text-slate-600');
+                        if (icon) { icon.classList.remove('text-indigo-600'); icon.classList.add('text-slate-400'); }
+                        if (dot) dot.remove();
+                    }
+                });
+            } catch (e) {}
+        }
+
+        function closeMobileSidebar() {
+            var sb = document.getElementById('app-sidebar');
+            var ov = document.getElementById('sidebar-overlay');
+            if (sb) sb.classList.add('-translate-x-full');
+            if (ov) ov.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function navigate(url, push) {
+            if (isNavigating) return;
+            isNavigating = true;
+            contentEl.classList.add('opacity-60', 'pointer-events-none');
+
+            fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'same-origin'
+            }).then(function (res) {
+                if (!res.ok) throw new Error('bad status');
+                var finalUrl = res.url || url;
+                return res.text().then(function (html) { return { html: html, finalUrl: finalUrl }; });
+            }).then(function (result) {
+                contentEl.innerHTML = result.html;
+                executeScripts(contentEl);
+                updateActiveNav(result.finalUrl);
+                if (push) {
+                    history.pushState({ pjax: true }, '', result.finalUrl);
+                }
+                window.scrollTo(0, 0);
+                closeMobileSidebar();
+            }).catch(function () {
+                window.location.href = url;
+            }).finally(function () {
+                isNavigating = false;
+                contentEl.classList.remove('opacity-60', 'pointer-events-none');
+            });
+        }
+
+        document.addEventListener('click', function (e) {
+            if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            var link = e.target.closest('a');
+            if (!isAjaxable(link)) return;
+            e.preventDefault();
+            navigate(link.href, true);
+        });
+
+        window.addEventListener('popstate', function () {
+            navigate(window.location.href, false);
+        });
+    })();
 </script>
 
 <!-- Page content wrapper -->
 <div class="main-content-wrapper flex flex-col flex-1 lg:ml-64">
-<main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<main id="page-content" class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<?php endif; ?>
