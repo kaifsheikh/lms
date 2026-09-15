@@ -323,7 +323,10 @@ function nav_is_active($href, $current_path) {
     })();
 
     // ---- AJAX (PJAX-style) navigation: load internal links without full page reload ----
-    (function () {
+    // Wrapped in DOMContentLoaded because #page-content is defined further down
+    // in the HTML (after this script tag), so it doesn't exist yet at the moment
+    // this <script> block first runs.
+    document.addEventListener('DOMContentLoaded', function () {
         var contentEl = document.getElementById('page-content');
         if (!contentEl) return;
         var BASE = '<?= BASE_URL ?>';
@@ -431,7 +434,7 @@ function nav_is_active($href, $current_path) {
         window.addEventListener('popstate', function () {
             navigate(window.location.href, false);
         });
-    })();
+    });
 </script>
 
 <!-- Page content wrapper -->
