@@ -72,4 +72,39 @@ class User
         $stmt->close();
         return $student; // null agar nahi mila
     }
+
+    // Email already exists check karo
+public function emailExists($email)
+{
+    $stmt = $this->conn->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+    $exists = $stmt->num_rows > 0;
+    $stmt->close();
+    return $exists;
+}
+
+// Naya user create karo (admin/teacher registration)
+public function createUser($full_name, $email, $password, $contact, $role, $status = 'pending')
+{
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $this->conn->prepare("
+        INSERT INTO users (full_name, email, password, contact, role, status)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "ssssss",
+        $full_name,
+        $email,
+        $hashed_password,
+        $contact,
+        $role,
+        $status
+    );
+    $success = $stmt->execute();
+    $stmt->close();
+    return $success;
+}
 }
