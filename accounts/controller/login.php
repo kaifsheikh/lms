@@ -1,13 +1,8 @@
 <?php
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lms/config.php';
 require_once SESSION;
 require_once DB;
-
-
-// ---------------------------------------------------------
-// Already logged in user ko dashboard par bhejo
-// ---------------------------------------------------------
+require_once BASE_PATH . 'models/User.php';
 
 if (isLoggedIn()) {
     header(
@@ -20,54 +15,30 @@ if (isLoggedIn()) {
     exit;
 }
 
-
-// ---------------------------------------------------------
-// Variables
-// ---------------------------------------------------------
+$userModel = new User($conn);
 
 $error = '';
 $old = [];
 $success = '';
-
-
-// ---------------------------------------------------------
-// Session success message
-// ---------------------------------------------------------
 
 if (isset($_SESSION['success'])) {
     $success = $_SESSION['success'];
     unset($_SESSION['success']);
 }
 
-
-// ---------------------------------------------------------
-// Login Form Submit
-// ---------------------------------------------------------
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // -----------------------------------------------------
     // CSRF Protection
-    // -----------------------------------------------------
-
     if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
         http_response_code(403);
         exit('Invalid CSRF token');
     }
 
-
-    // -----------------------------------------------------
     // Get Form Data
-    // -----------------------------------------------------
-
     $old['email'] = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-
-    // -----------------------------------------------------
     // Basic Validation
-    // -----------------------------------------------------
-
     if (empty($old['email']) || empty($password)) {
 
         $error = 'Email and password are required.';
@@ -78,107 +49,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
 
-        $role = '';
-        $user_id = null;
-        $full_name = '';
-        $hashed_password = '';
-        $status = '';
+        $user = $userModel->findByEmail($old['email']);
 
-
-        // =================================================
-        // 1. Check users table
-        // Admin / Teacher / Accountant
-        // =================================================
-
-        $stmt = $conn->prepare(
-            "SELECT id, full_name, password, role, status
-             FROM users
-             WHERE email = ?"
-        );
-
-        if (!$stmt) {
-            http_response_code(500);
-            exit('Database error.');
+        if (!$user) {
+            $user = $userModel->findStudentByEmail($old['email']);
         }
 
-        $stmt->bind_param("s", $old['email']);
-        $stmt->execute();
-        $stmt->store_result();
-
-
-        if ($stmt->num_rows > 0) {
-
-            $stmt->bind_result(
-                $user_id,
-                $full_name,
-                $hashed_password,
-                $role,
-                $status
-            );
-
-            $stmt->fetch();
-
+        if (!$user) {
+            $error = 'Invalid email or password.';
         } else {
 
-            // Close users query
-            $stmt->close();
-
-
-            // =================================================
-            // 2. Check students table
-            // =================================================
-
-            $stmt = $conn->prepare(
-                "SELECT id, full_name, password, 'student' AS role, status
-                 FROM students
-                 WHERE email = ?"
-            );
-
-            if (!$stmt) {
-                http_response_code(500);
-                exit('Database error.');
-            }
-
-            $stmt->bind_param("s", $old['email']);
-            $stmt->execute();
-            $stmt->store_result();
-
-
-            if ($stmt->num_rows > 0) {
-
-                $stmt->bind_result(
-                    $user_id,
-                    $full_name,
-                    $hashed_password,
-                    $role,
-                    $status
-                );
-
-                $stmt->fetch();
-
-            } else {
-
-                // Generic message — email enumeration se protection
-                $error = 'Invalid email or password.';
-            }
-        }
-
-
-        // =================================================
-        // Password Verification
-        // =================================================
-
-        if (empty($error)) {
-
-            if (!password_verify($password, $hashed_password)) {
+            // Password Verification
+            if (!password_verify($password, $user['password'])) {
 
                 $error = 'Invalid email or password.';
 
             } else {
 
-                // =================================================
-                // STUDENT
-                // =================================================
+                $role      = $user['role'];
+                $status    = $user['status'];
+                $user_id   = $user['id'];
+                $full_name = $user['full_name'];
 
                 if ($role === 'student') {
 
@@ -191,10 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $error = 'Your student application is under process.';
 
                     } elseif ($status === 'active') {
-
-                        // -----------------------------------------
-                        // Successful student login
-                        // -----------------------------------------
 
                         session_regenerate_id(true);
 
@@ -214,11 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $error = 'Invalid student status.';
                     }
 
-
-                // =================================================
-                // ADMIN / TEACHER / ACCOUNTANT
-                // =================================================
-
                 } else {
 
                     if ($status === 'pending') {
@@ -230,10 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $error = 'Your account has been rejected by admin.';
 
                     } else {
-
-                        // -----------------------------------------
-                        // Successful user login
-                        // -----------------------------------------
 
                         session_regenerate_id(true);
 
@@ -253,23 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-
-
-        // -----------------------------------------------------
-        // Close statement
-        // -----------------------------------------------------
-
-        if (isset($stmt)) {
-            $stmt->close();
-        }
     }
 }
 
-
-// ---------------------------------------------------------
-// Login View
-// ---------------------------------------------------------
-
 include BASE_PATH . 'accounts/view/login.php';
-
 ?>

@@ -40,4 +40,36 @@ class User
         $stmt->close();
         return ['success' => $success, 'affected' => $affected];
     }
+
+    // Login ke liye: users table se email se user dhundo
+    public function findByEmail($email)
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT id, full_name, password, role, status
+             FROM users
+             WHERE email = ?"
+        );
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        return $user; // null agar nahi mila
+    }
+
+    // Login ke liye: students table se email se student dhundo
+    public function findStudentByEmail($email)
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT id, full_name, password, 'student' AS role, status
+             FROM students
+             WHERE email = ?"
+        );
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $student = $result->fetch_assoc();
+        $stmt->close();
+        return $student; // null agar nahi mila
+    }
 }

@@ -11,5 +11,9 @@ define('HEADER', INCLUDES_PATH . 'header.php');
 define('FOOTER', INCLUDES_PATH . 'footer.php');
 define('SESSION', INCLUDES_PATH . 'session.php');
 define('DB', INCLUDES_PATH . 'db.php');
+
+// Includes for Login Page header
+define('AUTH_HEADER', INCLUDES_PATH . 'auth_header.php');
+
 require_once INCLUDES_PATH . 'autoload.php';
 ?>
