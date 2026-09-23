@@ -15,34 +15,33 @@ class Batch
     // ADMIN METHODS
     // =====================================================
 
-    public function getAllBatchesWithDetails()
-    {
-        $batches = [];
-        $sql = "
-            SELECT
-                b.id,
-                b.batch_name,
-                b.starting_date,
-                b.batch_time,
-                b.status,
-                b.created_at,
-                b.teacher_id,
-                u.full_name AS teacher_name,
-                COUNT(bs.student_id) AS total_students
-            FROM batches b
-            JOIN users u ON b.teacher_id = u.id
-            LEFT JOIN batch_students bs ON bs.batch_id = b.id
-            GROUP BY b.id, b.batch_name, b.starting_date, b.batch_time, b.status, b.created_at, b.teacher_id, u.full_name
-            ORDER BY b.created_at DESC
-        ";
-        $result = $this->conn->query($sql);
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $batches[] = $row;
-            }
+public function getAllBatchesWithDetails()
+{
+    $batches = [];
+    $sql = "
+        SELECT
+            b.id,
+            b.batch_name,
+            b.starting_date,
+            b.status,
+            b.created_at,
+            b.teacher_id,
+            u.full_name AS teacher_name,
+            COUNT(bs.student_id) AS total_students
+        FROM batches b
+        JOIN users u ON b.teacher_id = u.id
+        LEFT JOIN batch_students bs ON bs.batch_id = b.id
+        GROUP BY b.id, b.batch_name, b.starting_date, b.status, b.created_at, b.teacher_id, u.full_name
+        ORDER BY b.created_at DESC
+    ";
+    $result = $this->conn->query($sql);
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $batches[] = $row;
         }
-        return $batches;
     }
+    return $batches;
+}
 
     public function updateBatchStatus($batch_id, $new_status)
     {

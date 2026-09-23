@@ -92,15 +92,9 @@
                         </select>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Starting Date</label>
-                            <input type="date" name="starting_date" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Batch Time</label>
-                            <input type="text" name="batch_time" required placeholder="09:00 AM" class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Starting Date</label>
+                        <input type="date" name="starting_date" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <div class="pt-2 flex justify-end gap-3">
@@ -132,29 +126,25 @@
                     
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Batch</label>
-                       <select name="batch_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-    <option value="">-- Select Batch --</option>
-    <?php foreach ($batches as $batch): ?>
-        <option value="<?php echo $batch['id']; ?>">
-            <?php echo htmlspecialchars(
-                $batch['batch_name'] . ' (' . $batch['batch_time'] . ') - Teacher: ' . $batch['teacher_name']
-            ); ?>
-        </option>
-    <?php endforeach; ?>
-</select>
+                        <select name="batch_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="">-- Select Batch --</option>
+                            <?php foreach ($batches as $batch): ?>
+                                <option value="<?php echo $batch['id']; ?>">
+                                    <?php echo htmlspecialchars($batch['batch_name'] . ' - Teacher: ' . $batch['teacher_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Student</label>
                         <select name="student_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-    <option value="">-- Select Student --</option>
-    <?php foreach ($unassigned_students as $student): ?>
-        <option value="<?php echo $student['id']; ?>">
-            <?php echo htmlspecialchars(
-                $student['full_name'] . ' (' . $student['student_id'] . ') - Teacher: ' . $student['teacher_name']
-            ); ?>
-        </option>
-    <?php endforeach; ?>
-</select>
+                            <option value="">-- Select Student --</option>
+                            <?php foreach ($unassigned_students as $student): ?>
+                                <option value="<?php echo $student['id']; ?>">
+                                    <?php echo htmlspecialchars($student['full_name'] . ' (' . $student['student_id'] . ') - Teacher: ' . $student['teacher_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="pt-2 flex justify-end gap-3">
@@ -228,36 +218,32 @@
                     <input type="hidden" name="action" value="transfer_student">
                     
                     <div>
-                       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Current Batch</label>
-<select id="transfer_current_batch" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-    <option value="">-- Select Current Batch --</option>
-    <?php foreach ($batches as $batch): ?>
-        <option value="<?php echo $batch['id']; ?>">
-            <?php echo htmlspecialchars(
-                $batch['batch_name'] . ' (' . $batch['batch_time'] . ') - Teacher: ' . $batch['teacher_name']
-            ); ?>
-        </option>
-    <?php endforeach; ?>
-</select>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Current Batch</label>
+                        <select id="transfer_current_batch" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="">-- Select Current Batch --</option>
+                            <?php foreach ($batches as $batch): ?>
+                                <option value="<?php echo $batch['id']; ?>">
+                                    <?php echo htmlspecialchars($batch['batch_name'] . ' - Teacher: ' . $batch['teacher_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div>
-                       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Student</label>
-<select id="transfer_student_select" name="student_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-    <option value="">-- Select Student --</option>
-</select>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Select Student</label>
+                        <select id="transfer_student_select" name="student_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="">-- Select Student --</option>
+                        </select>
                     </div>
                     <div>
-                       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Destination Batch</label>
-<select id="destination_batch_select" name="new_batch_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-    <option value="">-- Select Batch --</option>
-    <?php foreach ($batches as $batch): ?>
-        <option value="<?php echo $batch['id']; ?>">
-            <?php echo htmlspecialchars(
-                $batch['batch_name'] . ' (' . $batch['batch_time'] . ') - Teacher: ' . $batch['teacher_name']
-            ); ?>
-        </option>
-    <?php endforeach; ?>
-</select>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Destination Batch</label>
+                        <select id="destination_batch_select" name="new_batch_id" required class="block w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="">-- Select Batch --</option>
+                            <?php foreach ($batches as $batch): ?>
+                                <option value="<?php echo $batch['id']; ?>">
+                                    <?php echo htmlspecialchars($batch['batch_name'] . ' - Teacher: ' . $batch['teacher_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="pt-2 flex justify-end gap-3">
@@ -278,7 +264,6 @@
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Batch Name</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Teacher</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Starting Date</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Students</th>
                         <th class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
                     </tr>
@@ -296,7 +281,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><?php echo htmlspecialchars($batch['teacher_name']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><?php echo htmlspecialchars($batch['starting_date']); ?></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><?php echo htmlspecialchars($batch['batch_time']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
                                     <?php echo $batch['total_students']; ?> Active

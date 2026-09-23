@@ -34,7 +34,6 @@
                     <table class="min-w-full divide-y divide-slate-200" id="studentsTable">
                         <thead class="bg-slate-50">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">ID</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Student ID</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Full Name</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Course</th>
@@ -47,7 +46,6 @@
                             <?php if (!empty($students)): ?>
                                 <?php foreach ($students as $row): ?>
                                     <tr class="hover:bg-slate-50 transition-colors student-row">
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-500"><?php echo $row['id']; ?></td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600"><?php echo htmlspecialchars($row['student_id']); ?></td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-800"><?php echo htmlspecialchars($row['full_name']); ?></td>
                                         <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600"><?php echo htmlspecialchars($row['course_name']); ?></td>
@@ -83,7 +81,7 @@
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="7" class="px-4 py-6 text-center text-sm text-slate-500">No students found.</td>
+                                    <td colspan="6" class="px-4 py-6 text-center text-sm text-slate-500">No students found.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -138,22 +136,16 @@
             <div class="mt-4 border-t border-slate-200 pt-4">
                 <h3 class="text-base font-semibold text-slate-800 mb-3">Student Details</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-slate-600">
-                    <p><span class="font-medium text-slate-700">ID:</span> <?php echo htmlspecialchars($searched_student['id']); ?></p>
-                    <p><span class="font-medium text-slate-700">Student ID:</span> <?php echo htmlspecialchars($searched_student['student_id']); ?></p>
                     <p><span class="font-medium text-slate-700">Full Name:</span> <?php echo htmlspecialchars($searched_student['full_name']); ?></p>
-                    <p><span class="font-medium text-slate-700">Father Name:</span> <?php echo htmlspecialchars($searched_student['father_name']); ?></p>
                     <p><span class="font-medium text-slate-700">Contact:</span> <?php echo htmlspecialchars($searched_student['contact_number']); ?></p>
                     <p><span class="font-medium text-slate-700">Email:</span> <?php echo htmlspecialchars($searched_student['email']); ?></p>
                     <p><span class="font-medium text-slate-700">Gender:</span> <?php echo htmlspecialchars($searched_student['gender']); ?></p>
-                    <p><span class="font-medium text-slate-700">Date of Birth:</span> <?php echo htmlspecialchars($searched_student['dob']); ?></p>
                     <p><span class="font-medium text-slate-700">Address:</span> <?php echo htmlspecialchars($searched_student['address']); ?></p>
                     <p><span class="font-medium text-slate-700">Joining Date:</span> <?php echo htmlspecialchars($searched_student['joining_date']); ?></p>
                     <p><span class="font-medium text-slate-700">Course Name:</span> <?php echo htmlspecialchars($searched_student['course_name']); ?></p>
                     <p><span class="font-medium text-slate-700">Class Timing:</span> <?php echo htmlspecialchars($searched_student['class_timing']); ?></p>
                     <p><span class="font-medium text-slate-700">Course Duration:</span> <?php echo htmlspecialchars($searched_student['course_duration']); ?></p>
                     <p><span class="font-medium text-slate-700">Highest Education:</span> <?php echo htmlspecialchars($searched_student['highest_education']); ?></p>
-                    <p><span class="font-medium text-slate-700">Status:</span> <?php echo htmlspecialchars($searched_student['status']); ?></p>
-                    <p><span class="font-medium text-slate-700">Assigned Teacher ID:</span> <?php echo htmlspecialchars($searched_student['teacher_id'] ?? 'N/A'); ?></p>
 
                     <?php if (!empty($searched_student['student_pic'])): ?>
                         <p class="flex items-center gap-2"><span class="font-medium text-slate-700">Student Pic:</span>
