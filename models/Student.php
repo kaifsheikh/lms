@@ -437,42 +437,50 @@ public function getUnassignedStudents()
     return $students;
 }
 
-    public function searchStudentWithProgress($student_id_str, $teacher_id)
-    {
-        $stmt = $this->conn->prepare("
-            SELECT id, student_id, full_name, course_name, class_timing,
-                   course_duration, joining_date
-            FROM students
-            WHERE student_id = ? AND teacher_id = ?
-        ");
-        $stmt->bind_param("si", $student_id_str, $teacher_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+public function searchStudentWithProgress($student_id_str, $teacher_id)
+{
+    $stmt = $this->conn->prepare("
+        SELECT id, student_id, full_name, course_name, class_timing,
+               course_duration, joining_date
+        FROM students
+        WHERE student_id = ? AND teacher_id = ?
+    ");
+    $stmt->bind_param("si", $student_id_str, $teacher_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($row = $result->fetch_assoc()) {
-            $stmt->close();
-
-            $joining_date = $row['joining_date'];
-            $duration_months = intval($row['course_duration']);
-            $row['course_end_date'] = date('Y-m-d', strtotime("+$duration_months months", strtotime($joining_date)));
-
-            $start = new DateTime($joining_date);
-            $now = new DateTime();
-            $interval = $start->diff($now);
-
-            $days_elapsed = (int) $interval->format('%a');
-            if ($days_elapsed < 0) $days_elapsed = 0;
-
-            $months_elapsed = ($interval->y * 12) + $interval->m + 1;
-            if ($months_elapsed < 1) $months_elapsed = 1;
-            if ($months_elapsed > $duration_months) $months_elapsed = $duration_months;
-
-            $row['current_course_month'] = $months_elapsed;
-            $row['days_elapsed'] = $days_elapsed;
-
-            return $row;
-        }
+    if ($row = $result->fetch_assoc()) {
         $stmt->close();
-        return null;
+
+        $joining_date = $row['joining_date'];
+        $duration_months = intval($row['course_duration']);
+        $row['course_end_date'] = date('Y-m-d', strtotime("+$duration_months months", strtotime($joining_date)));
+
+        $start = new DateTime($joining_date);
+        $now = new DateTime();
+        $interval = $start->diff($now);
+
+        $days_elapsed = (int) $interval->format('%a');
+        if ($days_elapsed < 0) $days_elapsed = 0;
+
+        // Complete months + remaining days (for "1 month 5 days" display)
+        $complete_months = ($interval->y * 12) + $interval->m;
+        $remaining_days  = $interval->d;
+
+        $row['complete_months'] = $complete_months;
+        $row['remaining_days']  = $remaining_days;
+
+        // Old values (agar kahin aur use ho rahe hain to safe rahe)
+        $months_elapsed = $complete_months + 1;
+        if ($months_elapsed < 1) $months_elapsed = 1;
+        if ($months_elapsed > $duration_months) $months_elapsed = $duration_months;
+
+        $row['current_course_month'] = $months_elapsed;
+        $row['days_elapsed'] = $days_elapsed;
+
+        return $row;
     }
+    $stmt->close();
+    return null;
+}
 }

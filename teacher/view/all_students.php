@@ -50,8 +50,12 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['course_name']); ?></td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['class_timing']); ?></td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['course_duration']); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['joining_date']); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><?php echo htmlspecialchars($student['course_end_date']); ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?php echo !empty($student['joining_date']) ? date('j F Y', strtotime($student['joining_date'])) : 'N/A'; ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?php echo !empty($student['course_end_date']) && $student['course_end_date'] !== 'N/A' ? date('j F Y', strtotime($student['course_end_date'])) : 'N/A'; ?>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <?php
                                     $status = $student['status'];

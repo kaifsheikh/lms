@@ -130,10 +130,17 @@
                             </svg>
                         </span>
                         <div>
-                            <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Current Progress</p>
-                            <p class="text-sm font-semibold text-gray-800">
-                                Month <?php echo $searched_student['current_course_month']; ?>, Day <?php echo $searched_student['days_elapsed']; ?>
-                            </p>
+                          <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Current Progress</p>
+                        <p class="text-sm font-semibold text-gray-800">
+                            <?php
+                                $m = (int) $searched_student['complete_months'];
+                                $d = (int) $searched_student['remaining_days'];
+                                $parts = [];
+                                if ($m > 0) $parts[] = $m . ' month' . ($m > 1 ? 's' : '');
+                                if ($d > 0) $parts[] = $d . ' day' . ($d > 1 ? 's' : '');
+                                echo $parts ? implode(' ', $parts) : 'Just started';
+                            ?>
+                        </p>
                         </div>
                     </div>
                 </div>
